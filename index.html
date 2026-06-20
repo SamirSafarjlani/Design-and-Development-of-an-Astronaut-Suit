@@ -933,11 +933,9 @@ footer {
     <li><a href="#about">About</a></li>
     <li><a href="#overview">Overview</a></li>
     <li><a href="#hud">HUD</a></li>
-    <li><a href="#plss">PLSS</a></li>
     <li><a href="#electronics">Electronics</a></li>
-    <li><a href="#timeline">Process</a></li>
     <li><a href="#team">Team</a></li>
-    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#impact">Impact</a></li>
   </ul>
   <div class="nav-hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')">
     <span></span><span></span><span></span>
@@ -1087,8 +1085,6 @@ footer {
       <button class="sub-tab" onclick="showInfo('gloves-tab')">Exo Gloves</button>
       <button class="sub-tab" onclick="showInfo('body-tab')">Suit Body</button>
       <button class="sub-tab" onclick="showInfo('chest-tab')">Chest Interface</button>
-      <button class="sub-tab" onclick="showInfo('sensors-tab')">Sensors</button>
-      <button class="sub-tab" onclick="showInfo('power-tab')">Power System</button>
     </div>
     <div class="overview-container reveal">
       <div class="suit-visual">
@@ -1121,9 +1117,7 @@ footer {
           <div class="hotspot left" style="top:28%;left:4%" data-label="PLSS" data-target="plss-tab" onclick="showInfo('plss-tab')"><div class="hotspot-dot"></div></div>
           <div class="hotspot" style="top:40%;left:35%" data-label="Chest Interface" data-target="chest-tab" onclick="showInfo('chest-tab')"><div class="hotspot-dot"></div></div>
           <div class="hotspot left" style="top:54%;left:4%" data-label="Exo Gloves" data-target="gloves-tab" onclick="showInfo('gloves-tab')"><div class="hotspot-dot"></div></div>
-          <div class="hotspot" style="top:54%;right:4%;left:auto" data-label="Sensors" data-target="sensors-tab" onclick="showInfo('sensors-tab')"><div class="hotspot-dot"></div></div>
           <div class="hotspot" style="top:70%;left:50%;transform:translate(-50%,0)" data-label="Suit Body" data-target="body-tab" onclick="showInfo('body-tab')"><div class="hotspot-dot"></div></div>
-          <div class="hotspot" style="top:84%;left:50%;transform:translate(-50%,0)" data-label="Power System" data-target="power-tab" onclick="showInfo('power-tab')"><div class="hotspot-dot"></div></div>
         </div>
       </div>
       <div class="suit-info-panel">
@@ -1191,32 +1185,6 @@ footer {
             <li>Emergency system toggles</li>
             <li>Communication system controls</li>
             <li>Battery status indicators</li>
-          </ul>
-        </div>
-        <div class="info-card" id="info-sensors-tab">
-          <div class="info-card-title">Sensor Array</div>
-          <div class="info-card-sub">Environmental & Biometric Sensing</div>
-          <p>A distributed network of sensors throughout the suit continuously monitors both the astronaut's biometrics and the external environment. All data is processed by the onboard ESP32-C3 and transmitted to the HUD and ground control in real time.</p>
-          <ul class="info-list">
-            <li>MAX30102 pulse oximeter</li>
-            <li>BME280 environmental sensor</li>
-            <li>Radiation dosimeter</li>
-            <li>Suit pressure transducers</li>
-            <li>CO₂ NDIR gas sensor</li>
-            <li>IMU motion tracking</li>
-          </ul>
-        </div>
-        <div class="info-card" id="info-power-tab">
-          <div class="info-card-title">Power System</div>
-          <div class="info-card-sub">Distributed Energy Management</div>
-          <p>A high-density lithium polymer battery system distributed across the PLSS and suit body provides reliable power to all subsystems. Smart power management firmware dynamically allocates power based on mission phase and system priority.</p>
-          <ul class="info-list">
-            <li>High-density LiPo primary cells</li>
-            <li>Redundant emergency battery</li>
-            <li>Smart power distribution PCB</li>
-            <li>Solar trickle charge capability</li>
-            <li>Low-power sleep modes</li>
-            <li>8+ hour EVA battery life</li>
           </ul>
         </div>
       </div>
@@ -1302,53 +1270,11 @@ footer {
   </div>
 </section>
 
-<!-- PLSS -->
-<section id="plss">
-  <div class="container">
-    <div class="reveal">
-      <div class="section-label">// 04 — LIFE SUPPORT</div>
-      <h2 class="section-title">Portable Life Support System</h2>
-      <div class="section-line"></div>
-    </div>
-    <div class="plss-layout reveal">
-      <div class="plss-visual">
-        <div class="plss-box">
-          <div class="plss-label">PLSS UNIT</div>
-          <div class="plss-icon-row">
-            <div class="plss-module">🫁<span>O₂ SUPPLY</span></div>
-            <div class="plss-module">💨<span>CO₂ SCRUB</span></div>
-            <div class="plss-module">🌡️<span>THERMAL</span></div>
-          </div>
-          <div class="plss-icon-row">
-            <div class="plss-module">🔋<span>BATTERY</span></div>
-            <div class="plss-module">💧<span>H₂O LOOP</span></div>
-            <div class="plss-module">🆘<span>EMERGENCY</span></div>
-          </div>
-          <div style="width:100%;height:1px;background:var(--glass-border);margin:10px 0"></div>
-          <div style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--cyan);letter-spacing:2px;text-align:center">ALL SYSTEMS NOMINAL</div>
-        </div>
-      </div>
-      <div class="plss-info">
-        <p>The Portable Life Support System is the most critical subsystem of any EVA suit. Without it, an astronaut cannot survive in the vacuum of space. Our PLSS design integrates all life-critical functions into a compact, reliable backpack unit.</p>
-        <p>The system ensures continuous oxygen delivery, removes exhaled CO₂, maintains comfortable internal temperature, and provides redundant safety systems to protect the astronaut at all times during extravehicular activities.</p>
-        <div class="spec-grid">
-          <div class="spec-card"><div class="spec-card-title">O₂ SUPPLY</div><div class="spec-card-val">8+ Hour Capacity</div></div>
-          <div class="spec-card"><div class="spec-card-title">CO₂ REMOVAL</div><div class="spec-card-val">LiOH Scrubbers</div></div>
-          <div class="spec-card"><div class="spec-card-title">TEMP CONTROL</div><div class="spec-card-val">18–26°C Range</div></div>
-          <div class="spec-card"><div class="spec-card-title">AIR FLOW</div><div class="spec-card-val">170 L/min</div></div>
-          <div class="spec-card"><div class="spec-card-title">BATTERY</div><div class="spec-card-val">High-Density LiPo</div></div>
-          <div class="spec-card"><div class="spec-card-title">EMERGENCY</div><div class="spec-card-val">30-min Backup O₂</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- GLOVES -->
 <section id="gloves">
   <div class="container">
     <div class="reveal">
-      <div class="section-label">// 05 — EXOSKELETON GLOVES</div>
+      <div class="section-label">// 04 — EXOSKELETON GLOVES</div>
       <h2 class="section-title">Assisted Dexterity System</h2>
       <div class="section-line"></div>
     </div>
@@ -1435,7 +1361,7 @@ footer {
 <section id="materials">
   <div class="container">
     <div class="reveal">
-      <div class="section-label">// 06 — MATERIALS & ENGINEERING</div>
+      <div class="section-label">// 05 — MATERIALS & ENGINEERING</div>
       <h2 class="section-title">Suit Construction</h2>
       <div class="section-line"></div>
       <p style="color:var(--silver);max-width:650px;line-height:1.9;margin-bottom:40px;font-weight:300;">
@@ -1481,7 +1407,7 @@ footer {
 <section id="electronics">
   <div class="container">
     <div class="reveal">
-      <div class="section-label">// 07 — ELECTRONICS & EMBEDDED SYSTEMS</div>
+      <div class="section-label">// 06 — ELECTRONICS & EMBEDDED SYSTEMS</div>
       <h2 class="section-title">System Architecture</h2>
       <div class="section-line"></div>
     </div>
@@ -1529,88 +1455,11 @@ footer {
   </div>
 </section>
 
-<!-- TIMELINE -->
-<section id="timeline">
-  <div class="container">
-    <div class="reveal" style="text-align:center;margin-bottom:60px">
-      <div class="section-label">// 08 — ENGINEERING PROCESS</div>
-      <h2 class="section-title">Development Timeline</h2>
-      <div class="section-line" style="margin:0 auto 0"></div>
-    </div>
-    <div class="timeline-track reveal">
-      <div class="timeline-line"></div>
-      <div class="timeline-item">
-        <div class="timeline-content">
-          <div class="timeline-phase">PHASE 01</div>
-          <h3>Research & Requirements</h3>
-          <p>Literature review of existing EVA suit designs, analysis of astronaut ergonomic data, and definition of system requirements. Benchmarking against NASA EMU and SpaceX IVA suit specifications.</p>
-          <span class="timeline-status status-complete">COMPLETE</span>
-        </div>
-        <div class="timeline-dot"></div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-content">
-          <div class="timeline-phase">PHASE 02</div>
-          <h3>Concept Development</h3>
-          <p>Generation of multiple design concepts across all subsystems. Feasibility analysis, trade studies, and selection of optimal architecture for each module including HUD, PLSS, and exoskeleton gloves.</p>
-          <span class="timeline-status status-complete">COMPLETE</span>
-        </div>
-        <div class="timeline-dot"></div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-content">
-          <div class="timeline-phase">PHASE 03</div>
-          <h3>CAD Design</h3>
-          <p>Full 3D modelling of all structural components in SolidWorks. Stress analysis on pressure vessels, thermal simulation on insulation stack-up, and assembly interference checking across all 200+ components.</p>
-          <span class="timeline-status status-complete">COMPLETE</span>
-        </div>
-        <div class="timeline-dot"></div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-content">
-          <div class="timeline-phase">PHASE 04</div>
-          <h3>PCB Design</h3>
-          <p>Schematic capture and PCB layout for the central electronics hub. 4-layer board designed in KiCad featuring the ESP32-C3, sensor interfaces, power management, and communication circuitry.</p>
-          <span class="timeline-status status-complete">COMPLETE</span>
-        </div>
-        <div class="timeline-dot"></div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-content">
-          <div class="timeline-phase">PHASE 05</div>
-          <h3>Prototype Manufacturing</h3>
-          <p>Fabrication of physical prototype using 3D printing, CNC machining, and layup techniques. PCB assembly and initial firmware flashing. Integration of all subsystems into the suit shell.</p>
-          <span class="timeline-status status-active">IN PROGRESS</span>
-        </div>
-        <div class="timeline-dot"></div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-content">
-          <div class="timeline-phase">PHASE 06</div>
-          <h3>Testing & Validation</h3>
-          <p>Structured test campaign covering pressure testing, sensor accuracy calibration, HUD readability testing, glove dexterity benchmarks, and full EVA simulation with a human subject.</p>
-          <span class="timeline-status status-pending">UPCOMING</span>
-        </div>
-        <div class="timeline-dot"></div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-content">
-          <div class="timeline-phase">PHASE 07</div>
-          <h3>Final Validation & Showcase</h3>
-          <p>Final integration testing, documentation completion, and preparation of the capstone showcase demonstration. Presentation to faculty, industry partners, and UTS stakeholders.</p>
-          <span class="timeline-status status-pending">UPCOMING</span>
-        </div>
-        <div class="timeline-dot"></div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- TEAM -->
 <section id="team">
   <div class="container">
     <div class="reveal" style="text-align:center;margin-bottom:60px">
-      <div class="section-label">// 09 — THE TEAM</div>
+      <div class="section-label">// 07 — THE TEAM</div>
       <h2 class="section-title">Meet the Engineers</h2>
       <div class="section-line" style="margin:0 auto 0"></div>
     </div>
@@ -1667,76 +1516,11 @@ footer {
   </div>
 </section>
 
-<!-- GALLERY -->
-<section id="gallery">
-  <div class="container">
-    <div class="reveal">
-      <div class="section-label">// 10 — PROJECT GALLERY</div>
-      <h2 class="section-title">Engineering Documentation</h2>
-      <div class="section-line"></div>
-    </div>
-    <div class="gallery-grid reveal">
-      <div class="gallery-item" onclick="openLightbox('CAD Full Assembly','Full suit 3D CAD render showing all major assemblies, sub-components, and the overall structural configuration generated in SolidWorks.')">
-        <div class="gallery-item-inner">
-          <div class="gallery-icon">🖥️</div>
-          <div class="gallery-label">CAD FULL ASSEMBLY</div>
-        </div>
-        <div class="gallery-overlay"><div class="gallery-overlay-icon">🔍</div></div>
-      </div>
-      <div class="gallery-item" onclick="openLightbox('PCB Layout','4-layer custom PCB layout showing ESP32-C3, sensor footprints, power management ICs, and communication modules.')">
-        <div class="gallery-item-inner">
-          <div class="gallery-icon">📋</div>
-          <div class="gallery-label">PCB LAYOUT</div>
-        </div>
-        <div class="gallery-overlay"><div class="gallery-overlay-icon">🔍</div></div>
-      </div>
-      <div class="gallery-item" onclick="openLightbox('Helmet HUD Prototype','Physical prototype of the helmet-mounted HUD assembly with OLED display integration and visor mounting hardware.')">
-        <div class="gallery-item-inner">
-          <div class="gallery-icon">🪖</div>
-          <div class="gallery-label">HELMET PROTOTYPE</div>
-        </div>
-        <div class="gallery-overlay"><div class="gallery-overlay-icon">🔍</div></div>
-      </div>
-      <div class="gallery-item" onclick="openLightbox('Exoskeleton Glove','Prototype of the exoskeleton glove showing servo mounting points, flex sensor routing, and wrist PCB integration.')">
-        <div class="gallery-item-inner">
-          <div class="gallery-icon">🤖</div>
-          <div class="gallery-label">EXO GLOVE PROTO</div>
-        </div>
-        <div class="gallery-overlay"><div class="gallery-overlay-icon">🔍</div></div>
-      </div>
-      <div class="gallery-item" onclick="openLightbox('Exploded View','Exploded CAD view showing the layer-by-layer suit construction including the pressure bladder, MLI stack, and outer shell.')">
-        <div class="gallery-item-inner">
-          <div class="gallery-icon">💥</div>
-          <div class="gallery-label">EXPLODED VIEW</div>
-        </div>
-        <div class="gallery-overlay"><div class="gallery-overlay-icon">🔍</div></div>
-      </div>
-      <div class="gallery-item" onclick="openLightbox('Team Testing','The project team conducting EVA simulation testing with the physical prototype in the UTS engineering lab.')">
-        <div class="gallery-item-inner">
-          <div class="gallery-icon">👨‍👩‍👧‍👦</div>
-          <div class="gallery-label">TEAM TESTING</div>
-        </div>
-        <div class="gallery-overlay"><div class="gallery-overlay-icon">🔍</div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox" onclick="if(event.target===this)closeLightbox()">
-  <div class="lightbox-content">
-    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-    <div class="lightbox-icon" id="lbIcon">🖥️</div>
-    <div class="lightbox-title" id="lbTitle">Title</div>
-    <div class="lightbox-desc" id="lbDesc">Description</div>
-  </div>
-</div>
-
 <!-- IMPACT -->
 <section id="impact">
   <div class="container">
     <div class="reveal">
-      <div class="section-label">// 11 — IMPACT & APPLICATIONS</div>
+      <div class="section-label">// 08 — IMPACT & APPLICATIONS</div>
       <h2 class="section-title">Beyond the Mission</h2>
       <div class="section-line"></div>
     </div>
@@ -1800,8 +1584,7 @@ footer {
           <li><a href="#about">About</a></li>
           <li><a href="#overview">Suit Overview</a></li>
           <li><a href="#team">Team</a></li>
-          <li><a href="#gallery">Gallery</a></li>
-        </ul>
+              </ul>
       </div>
     </div>
   </div>
@@ -1889,8 +1672,7 @@ function showInfo(id){
   if(card) card.classList.add('active');
   const tabs = document.querySelectorAll('.sub-tab');
   const tabMap = {
-    'helmet':0,'plss-tab':1,'gloves-tab':2,'body-tab':3,
-    'chest-tab':4,'sensors-tab':5,'power-tab':6
+    'helmet':0,'plss-tab':1,'gloves-tab':2,'body-tab':3,'chest-tab':4
   };
   if(tabMap[id]!==undefined && tabs[tabMap[id]]) tabs[tabMap[id]].classList.add('active');
 }
@@ -1910,20 +1692,6 @@ function showInfo(id){
   },3000);
 })();
 
-// ─── GALLERY LIGHTBOX ───
-const galleryIcons=['🖥️','📋','🪖','🤖','💥','👨‍👩‍👧‍👦'];
-let lastLbTitle='';
-function openLightbox(title, desc){
-  const idx = ['CAD Full Assembly','PCB Layout','Helmet HUD Prototype','Exoskeleton Glove','Exploded View','Team Testing'].indexOf(title);
-  document.getElementById('lbIcon').textContent = idx>=0 ? galleryIcons[idx] : '🔍';
-  document.getElementById('lbTitle').textContent = title;
-  document.getElementById('lbDesc').textContent = desc;
-  document.getElementById('lightbox').classList.add('open');
-}
-function closeLightbox(){
-  document.getElementById('lightbox').classList.remove('open');
-}
-document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeLightbox(); });
 
 // ─── NAV CLOSE ON LINK ───
 document.querySelectorAll('.nav-links a').forEach(a=>{
