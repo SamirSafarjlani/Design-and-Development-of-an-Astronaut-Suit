@@ -1,0 +1,1934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Development of an Astronaut Suit | UTS Capstone 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cyan: #00f5ff;
+  --blue: #0066ff;
+  --navy: #030b1a;
+  --dark: #010810;
+  --white: #e8f4ff;
+  --silver: #8ba8c8;
+  --glow-cyan: 0 0 20px rgba(0,245,255,0.5), 0 0 40px rgba(0,245,255,0.2);
+  --glow-blue: 0 0 20px rgba(0,102,255,0.5), 0 0 40px rgba(0,102,255,0.2);
+  --glass: rgba(0,245,255,0.04);
+  --glass-border: rgba(0,245,255,0.15);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--dark);
+  color: var(--white);
+  font-family: 'Exo 2', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ─── CANVAS STARFIELD ─── */
+#starfield { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; }
+
+/* ─── NAV ─── */
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:1000;
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 0 40px; height: 70px;
+  background: rgba(1,8,16,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--glass-border);
+}
+.nav-logo {
+  font-family:'Orbitron',sans-serif;
+  font-size:1rem; font-weight:700;
+  color:var(--cyan);
+  text-shadow: var(--glow-cyan);
+  letter-spacing:3px;
+}
+.nav-links { display:flex; gap:32px; list-style:none; }
+.nav-links a {
+  font-family:'Exo 2',sans-serif; font-size:0.8rem; font-weight:500;
+  color:var(--silver); text-decoration:none; letter-spacing:2px;
+  text-transform:uppercase; transition:color 0.3s;
+}
+.nav-links a:hover { color:var(--cyan); text-shadow:var(--glow-cyan); }
+.nav-hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; }
+.nav-hamburger span { display:block; width:24px; height:2px; background:var(--cyan); }
+
+/* ─── HERO ─── */
+#hero {
+  position:relative; z-index:1;
+  min-height:100vh;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; padding: 100px 20px 60px;
+  overflow:hidden;
+}
+.hero-badge {
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.7rem; letter-spacing:4px; color:var(--cyan);
+  border:1px solid var(--glass-border);
+  padding:6px 18px; border-radius:20px;
+  background:var(--glass);
+  margin-bottom:30px;
+  animation: fadeInDown 1s ease both;
+}
+.hero-title {
+  font-family:'Orbitron',sans-serif;
+  font-size: clamp(2.2rem, 6vw, 5.5rem);
+  font-weight:900; line-height:1.1;
+  background: linear-gradient(135deg, #fff 0%, var(--cyan) 50%, var(--blue) 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+  margin-bottom:24px;
+  animation: fadeInDown 1s 0.2s ease both;
+  filter: drop-shadow(0 0 30px rgba(0,245,255,0.3));
+}
+.hero-subtitle {
+  font-size:clamp(0.9rem,2vw,1.2rem); color:var(--silver);
+  max-width:680px; line-height:1.8; font-weight:300;
+  margin-bottom:50px;
+  animation: fadeInDown 1s 0.4s ease both;
+}
+.hero-suit {
+  position:relative;
+  width: clamp(260px, 40vw, 480px);
+  height: clamp(320px, 50vw, 580px);
+  margin: 0 auto 50px;
+  animation: floatSuit 6s ease-in-out infinite;
+}
+.suit-svg {
+  width:100%; height:100%;
+  filter: drop-shadow(0 0 40px rgba(0,245,255,0.4)) drop-shadow(0 0 80px rgba(0,102,255,0.2));
+}
+.hero-ring {
+  position:absolute; border-radius:50%;
+  border:1px solid rgba(0,245,255,0.15);
+  animation: spinRing linear infinite;
+}
+.hero-ring:nth-child(1){
+  width:120%; height:120%; top:-10%; left:-10%;
+  animation-duration:20s;
+}
+.hero-ring:nth-child(2){
+  width:140%; height:140%; top:-20%; left:-20%;
+  animation-duration:30s; animation-direction:reverse;
+}
+.hero-ring:nth-child(3){
+  width:160%; height:160%; top:-30%; left:-30%;
+  animation-duration:45s;
+  border-color:rgba(0,102,255,0.1);
+}
+.hero-btns {
+  display:flex; gap:20px; flex-wrap:wrap; justify-content:center;
+  animation: fadeInUp 1s 0.6s ease both;
+}
+.btn-primary, .btn-secondary {
+  font-family:'Orbitron',sans-serif; font-size:0.75rem;
+  letter-spacing:2px; text-transform:uppercase;
+  padding:14px 36px; border-radius:4px;
+  cursor:pointer; text-decoration:none;
+  transition: all 0.3s;
+  position:relative; overflow:hidden;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--blue), var(--cyan));
+  color:#000; border:none; font-weight:700;
+  box-shadow: var(--glow-blue);
+}
+.btn-primary:hover { transform:translateY(-2px); box-shadow:0 0 40px rgba(0,245,255,0.6); }
+.btn-secondary {
+  background:transparent; color:var(--cyan);
+  border:1px solid var(--cyan);
+}
+.btn-secondary:hover {
+  background:rgba(0,245,255,0.08);
+  box-shadow:var(--glow-cyan); transform:translateY(-2px);
+}
+.scroll-indicator {
+  position:absolute; bottom:30px; left:50%;
+  transform:translateX(-50%);
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  animation: fadeIn 2s 1.5s ease both;
+}
+.scroll-indicator span {
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.65rem; color:var(--silver); letter-spacing:3px;
+}
+.scroll-line {
+  width:1px; height:50px;
+  background:linear-gradient(to bottom, var(--cyan), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+/* ─── SECTIONS BASE ─── */
+section { position:relative; z-index:1; padding:100px 40px; }
+.section-label {
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.65rem; color:var(--cyan); letter-spacing:5px;
+  text-transform:uppercase; margin-bottom:12px;
+}
+.section-title {
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(1.6rem,4vw,2.8rem); font-weight:700;
+  margin-bottom:20px;
+  background:linear-gradient(135deg,#fff,var(--cyan));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.section-line {
+  width:80px; height:2px;
+  background:linear-gradient(90deg,var(--cyan),transparent);
+  margin-bottom:40px;
+}
+.container { max-width:1200px; margin:0 auto; }
+
+/* ─── ABOUT ─── */
+#about { background:linear-gradient(180deg, transparent, rgba(0,30,60,0.3), transparent); }
+.about-grid { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
+.about-text p {
+  color:var(--silver); line-height:1.9; font-size:1rem;
+  margin-bottom:20px; font-weight:300;
+}
+.goals-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:30px; }
+.goal-card {
+  background:var(--glass);
+  border:1px solid var(--glass-border);
+  border-radius:8px; padding:16px 20px;
+  display:flex; align-items:center; gap:12px;
+  transition:all 0.3s;
+}
+.goal-card:hover {
+  border-color:var(--cyan);
+  box-shadow:var(--glow-cyan);
+  background:rgba(0,245,255,0.06);
+  transform:translateX(4px);
+}
+.goal-icon { font-size:1.4rem; flex-shrink:0; }
+.goal-card span { font-size:0.85rem; color:var(--white); font-weight:500; }
+.about-visual {
+  position:relative; display:flex; align-items:center; justify-content:center;
+}
+.about-hex {
+  width:360px; height:360px;
+  background:radial-gradient(circle at center, rgba(0,245,255,0.08), transparent 70%);
+  border:1px solid var(--glass-border);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  position:relative;
+}
+.about-hex::before {
+  content:'';
+  position:absolute; inset:-20px;
+  border:1px dashed rgba(0,245,255,0.1);
+  border-radius:50%;
+  animation: spinRing 40s linear infinite;
+}
+.stats-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:20px;
+  padding:20px;
+}
+.stat-item { text-align:center; }
+.stat-num {
+  font-family:'Orbitron',sans-serif;
+  font-size:2rem; font-weight:900; color:var(--cyan);
+  text-shadow:var(--glow-cyan);
+}
+.stat-label { font-size:0.75rem; color:var(--silver); letter-spacing:2px; margin-top:4px; }
+
+/* ─── SUIT OVERVIEW ─── */
+#overview {
+  background:linear-gradient(180deg, transparent, rgba(0,20,50,0.4), transparent);
+}
+.overview-container { display:flex; gap:40px; align-items:flex-start; }
+.suit-visual { position:relative; flex:0 0 auto; width:380px; }
+.suit-diagram {
+  width:100%; height:600px;
+  position:relative;
+}
+.hotspot {
+  position:absolute;
+  width:36px; height:36px;
+  background:rgba(0,245,255,0.1);
+  border:2px solid var(--cyan);
+  border-radius:50%;
+  cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:all 0.3s;
+  animation: hotspotPulse 2s ease-in-out infinite;
+  z-index:10;
+}
+.hotspot:hover {
+  background:rgba(0,245,255,0.25);
+  box-shadow:var(--glow-cyan);
+  transform:scale(1.2);
+  animation:none;
+}
+.hotspot::after {
+  content:attr(data-label);
+  position:absolute; left:calc(100% + 12px);
+  white-space:nowrap;
+  font-size:0.7rem; color:var(--cyan);
+  font-family:'Share Tech Mono',monospace;
+  letter-spacing:1px;
+  pointer-events:none;
+}
+.hotspot.left::after { left:auto; right:calc(100% + 12px); }
+.hotspot-dot { width:8px; height:8px; background:var(--cyan); border-radius:50%; }
+.hotspot-line {
+  position:absolute; background:rgba(0,245,255,0.3);
+  height:1px; transform-origin:left center;
+  pointer-events:none;
+}
+.suit-info-panel {
+  flex:1; min-height:500px;
+}
+.info-card {
+  display:none;
+  background:var(--glass);
+  border:1px solid var(--glass-border);
+  border-radius:12px; padding:40px;
+  animation: fadeIn 0.4s ease;
+  height:100%;
+}
+.info-card.active { display:block; }
+.info-card-title {
+  font-family:'Orbitron',sans-serif; font-size:1.4rem;
+  color:var(--cyan); margin-bottom:8px;
+  text-shadow:var(--glow-cyan);
+}
+.info-card-sub { color:var(--silver); font-size:0.85rem; margin-bottom:24px; }
+.info-card p { color:#a0bcd8; line-height:1.9; margin-bottom:16px; }
+.info-list { list-style:none; margin-top:16px; }
+.info-list li {
+  padding:10px 0; border-bottom:1px solid rgba(0,245,255,0.07);
+  color:var(--silver); font-size:0.9rem;
+  display:flex; align-items:center; gap:10px;
+}
+.info-list li::before { content:'▸'; color:var(--cyan); font-size:0.7rem; }
+.subsystem-tabs {
+  display:flex; flex-wrap:wrap; gap:10px; margin-bottom:30px;
+}
+.sub-tab {
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.7rem; letter-spacing:2px;
+  padding:8px 16px; border-radius:4px;
+  border:1px solid var(--glass-border);
+  background:var(--glass); color:var(--silver);
+  cursor:pointer; transition:all 0.3s;
+}
+.sub-tab:hover, .sub-tab.active {
+  border-color:var(--cyan); color:var(--cyan);
+  background:rgba(0,245,255,0.06);
+  box-shadow:0 0 10px rgba(0,245,255,0.2);
+}
+
+/* ─── HUD ─── */
+#hud { background:linear-gradient(180deg, transparent, rgba(0,10,40,0.5), transparent); }
+.hud-layout { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
+.hud-display {
+  position:relative; background:rgba(0,245,255,0.03);
+  border:1px solid var(--glass-border);
+  border-radius:16px; padding:30px;
+  overflow:hidden;
+}
+.hud-display::before {
+  content:'';
+  position:absolute; inset:0;
+  background:radial-gradient(ellipse at top left, rgba(0,245,255,0.06), transparent 60%);
+}
+.hud-screen {
+  width:100%; aspect-ratio:4/3;
+  background:rgba(0,0,0,0.6);
+  border:1px solid rgba(0,245,255,0.2);
+  border-radius:8px;
+  position:relative; overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+}
+.hud-grid-lines {
+  position:absolute; inset:0;
+  background-image:
+    linear-gradient(rgba(0,245,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,245,255,0.05) 1px, transparent 1px);
+  background-size:30px 30px;
+}
+.hud-corner {
+  position:absolute; width:20px; height:20px;
+  border-color:var(--cyan);
+  border-style:solid;
+}
+.hud-corner.tl { top:8px; left:8px; border-width:2px 0 0 2px; }
+.hud-corner.tr { top:8px; right:8px; border-width:2px 2px 0 0; }
+.hud-corner.bl { bottom:8px; left:8px; border-width:0 0 2px 2px; }
+.hud-corner.br { bottom:8px; right:8px; border-width:0 2px 2px 0; }
+.hud-vitals {
+  position:relative; z-index:1;
+  display:grid; grid-template-columns:1fr 1fr; gap:16px;
+  padding:16px;
+}
+.vital-item {
+  text-align:center;
+  border:1px solid rgba(0,245,255,0.12);
+  border-radius:6px; padding:12px 8px;
+  background:rgba(0,0,0,0.4);
+}
+.vital-label { font-family:'Share Tech Mono',monospace; font-size:0.6rem; color:var(--silver); letter-spacing:2px; }
+.vital-value {
+  font-family:'Orbitron',sans-serif; font-size:1.3rem;
+  font-weight:700; color:var(--cyan);
+  text-shadow:var(--glow-cyan);
+  animation: vitalBlink 3s ease-in-out infinite;
+}
+.vital-unit { font-size:0.65rem; color:var(--silver); }
+.hud-alert {
+  position:absolute; bottom:16px; left:16px; right:16px;
+  background:rgba(255,100,0,0.1);
+  border:1px solid rgba(255,150,0,0.4);
+  border-radius:4px; padding:8px 12px;
+  font-family:'Share Tech Mono',monospace; font-size:0.65rem;
+  color:#ff9500; letter-spacing:2px;
+  animation: alertBlink 2s ease-in-out infinite;
+}
+.hud-metrics { display:flex; flex-direction:column; gap:20px; }
+.metric-bar { }
+.metric-label {
+  display:flex; justify-content:space-between;
+  font-size:0.8rem; color:var(--silver);
+  margin-bottom:8px; font-family:'Share Tech Mono',monospace;
+}
+.metric-label span:last-child { color:var(--cyan); }
+.bar-track {
+  height:6px; background:rgba(255,255,255,0.06);
+  border-radius:3px; overflow:hidden;
+}
+.bar-fill {
+  height:100%; border-radius:3px;
+  background:linear-gradient(90deg, var(--blue), var(--cyan));
+  box-shadow:0 0 8px rgba(0,245,255,0.4);
+  transition:width 1s ease;
+}
+
+/* ─── PLSS ─── */
+#plss { background:linear-gradient(180deg, transparent, rgba(0,15,35,0.4), transparent); }
+.plss-layout { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
+.plss-visual {
+  display:flex; align-items:center; justify-content:center;
+}
+.plss-box {
+  width:280px; height:380px;
+  background:linear-gradient(135deg, rgba(0,30,60,0.8), rgba(0,60,100,0.4));
+  border:1px solid var(--glass-border);
+  border-radius:16px;
+  position:relative; overflow:hidden;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px;
+  padding:30px;
+}
+.plss-box::before {
+  content:'';
+  position:absolute; inset:0;
+  background:linear-gradient(135deg, transparent, rgba(0,245,255,0.04));
+}
+.plss-icon-row {
+  display:flex; gap:20px;
+}
+.plss-module {
+  width:70px; height:100px;
+  border:1px solid var(--glass-border);
+  border-radius:8px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
+  font-size:1.8rem;
+  background:rgba(0,245,255,0.03);
+  transition:all 0.3s;
+  cursor:default;
+}
+.plss-module:hover {
+  border-color:var(--cyan);
+  box-shadow:var(--glow-cyan);
+  background:rgba(0,245,255,0.08);
+}
+.plss-module span { font-family:'Share Tech Mono',monospace; font-size:0.55rem; color:var(--silver); letter-spacing:1px; text-align:center; }
+.plss-label {
+  font-family:'Orbitron',monospace; font-size:0.8rem; color:var(--cyan);
+  letter-spacing:3px; text-align:center;
+}
+.plss-info { }
+.plss-info p { color:var(--silver); line-height:1.9; font-size:0.95rem; margin-bottom:20px; font-weight:300; }
+.spec-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:20px; }
+.spec-card {
+  background:var(--glass);
+  border:1px solid var(--glass-border);
+  border-radius:8px; padding:14px;
+  transition:all 0.3s;
+}
+.spec-card:hover { border-color:var(--cyan); box-shadow:var(--glow-cyan); }
+.spec-card-title { font-size:0.7rem; color:var(--cyan); letter-spacing:2px; font-family:'Share Tech Mono',monospace; margin-bottom:4px; }
+.spec-card-val { font-size:0.85rem; color:var(--white); font-weight:500; }
+
+/* ─── GLOVES ─── */
+#gloves { background:linear-gradient(180deg, transparent, rgba(0,20,50,0.3), transparent); }
+.gloves-layout { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
+.glove-visual {
+  position:relative; display:flex; align-items:center; justify-content:center;
+}
+.glove-svg-wrap {
+  position:relative;
+  width:300px; height:350px;
+  display:flex; align-items:center; justify-content:center;
+}
+.wireframe-glow {
+  filter: drop-shadow(0 0 20px rgba(0,245,255,0.6));
+  animation: floatSuit 4s ease-in-out infinite;
+}
+.glove-features { display:flex; flex-direction:column; gap:16px; }
+.feature-row {
+  display:flex; align-items:center; gap:20px;
+  padding:16px 20px;
+  background:var(--glass);
+  border:1px solid var(--glass-border);
+  border-radius:8px;
+  transition:all 0.3s;
+}
+.feature-row:hover {
+  border-color:var(--cyan);
+  box-shadow:var(--glow-cyan);
+  transform:translateX(6px);
+}
+.feature-num {
+  font-family:'Orbitron',sans-serif; font-size:1.4rem;
+  font-weight:900; color:rgba(0,245,255,0.25);
+  min-width:40px;
+}
+.feature-text h4 { font-size:0.95rem; color:var(--white); margin-bottom:4px; }
+.feature-text p { font-size:0.8rem; color:var(--silver); line-height:1.6; }
+
+/* ─── MATERIALS ─── */
+#materials { background:linear-gradient(180deg, transparent, rgba(0,10,30,0.5), transparent); }
+.materials-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:20px; }
+.material-card {
+  background:var(--glass);
+  border:1px solid var(--glass-border);
+  border-radius:12px; padding:30px 24px;
+  transition:all 0.4s;
+  position:relative; overflow:hidden;
+}
+.material-card::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg, var(--blue), var(--cyan));
+  opacity:0; transition:opacity 0.3s;
+}
+.material-card:hover::before { opacity:1; }
+.material-card:hover {
+  border-color:rgba(0,245,255,0.3);
+  box-shadow:var(--glow-cyan);
+  transform:translateY(-4px);
+}
+.material-icon { font-size:2.4rem; margin-bottom:16px; }
+.material-card h3 {
+  font-family:'Orbitron',sans-serif; font-size:0.9rem;
+  color:var(--cyan); margin-bottom:10px; letter-spacing:1px;
+}
+.material-card p { font-size:0.85rem; color:var(--silver); line-height:1.7; }
+
+/* ─── ELECTRONICS ─── */
+#electronics { background:linear-gradient(180deg, transparent, rgba(0,20,50,0.4), transparent); }
+.electronics-layout { display:grid; grid-template-columns:1fr 1.2fr; gap:60px; align-items:center; }
+.circuit-display {
+  position:relative;
+  background:rgba(0,0,0,0.6);
+  border:1px solid rgba(0,245,255,0.2);
+  border-radius:12px; padding:30px;
+  overflow:hidden;
+}
+.circuit-bg {
+  position:absolute; inset:0;
+  background-image:
+    linear-gradient(rgba(0,245,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,245,255,0.04) 1px, transparent 1px);
+  background-size:20px 20px;
+}
+.circuit-nodes { position:relative; z-index:1; }
+.node-row { display:flex; justify-content:space-around; margin-bottom:30px; }
+.node {
+  width:80px; height:80px;
+  border:2px solid var(--cyan);
+  border-radius:8px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
+  background:rgba(0,245,255,0.05);
+  font-size:1.5rem;
+  cursor:default;
+  transition:all 0.3s;
+  position:relative;
+}
+.node:hover {
+  background:rgba(0,245,255,0.12);
+  box-shadow:var(--glow-cyan);
+}
+.node-label { font-family:'Share Tech Mono',monospace; font-size:0.5rem; color:var(--cyan); letter-spacing:1px; text-align:center; }
+.node-connector {
+  height:2px; flex:1;
+  background:linear-gradient(90deg, var(--cyan), rgba(0,245,255,0.2));
+  animation: dataFlow 2s linear infinite;
+  position:relative;
+}
+.connect-row { display:flex; align-items:center; margin-bottom:10px; padding:0 40px; }
+.elec-specs { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.elec-spec {
+  background:var(--glass); border:1px solid var(--glass-border);
+  border-radius:8px; padding:16px;
+  transition:all 0.3s;
+}
+.elec-spec:hover { border-color:var(--cyan); box-shadow:var(--glow-cyan); }
+.elec-spec-label { font-size:0.65rem; color:var(--cyan); letter-spacing:2px; font-family:'Share Tech Mono',monospace; margin-bottom:6px; }
+.elec-spec-val { font-size:0.9rem; color:var(--white); font-weight:500; }
+
+/* ─── TIMELINE ─── */
+#timeline { background:linear-gradient(180deg, transparent, rgba(0,15,40,0.4), transparent); }
+.timeline-track {
+  position:relative; max-width:900px; margin:0 auto;
+  padding:20px 0;
+}
+.timeline-line {
+  position:absolute; left:50%; top:0; bottom:0;
+  width:2px;
+  background:linear-gradient(to bottom, transparent, var(--cyan), var(--blue), transparent);
+  transform:translateX(-50%);
+}
+.timeline-item {
+  display:flex; align-items:center; margin-bottom:50px;
+  position:relative;
+}
+.timeline-item:nth-child(odd) { flex-direction:row-reverse; }
+.timeline-item:nth-child(odd) .timeline-content { text-align:right; margin-right:60px; margin-left:0; }
+.timeline-content {
+  width:calc(50% - 60px);
+  margin-left:60px;
+  background:var(--glass);
+  border:1px solid var(--glass-border);
+  border-radius:10px; padding:24px;
+  transition:all 0.3s;
+}
+.timeline-content:hover {
+  border-color:var(--cyan);
+  box-shadow:var(--glow-cyan);
+  transform:scale(1.02);
+}
+.timeline-dot {
+  position:absolute; left:50%;
+  transform:translateX(-50%);
+  width:20px; height:20px;
+  background:var(--cyan);
+  border:3px solid var(--dark);
+  border-radius:50%;
+  box-shadow:var(--glow-cyan);
+  z-index:2;
+  flex-shrink:0;
+}
+.timeline-phase {
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.65rem; color:var(--cyan); letter-spacing:3px; margin-bottom:6px;
+}
+.timeline-content h3 {
+  font-family:'Orbitron',sans-serif; font-size:1rem;
+  color:var(--white); margin-bottom:8px;
+}
+.timeline-content p { font-size:0.85rem; color:var(--silver); line-height:1.7; }
+.timeline-status {
+  display:inline-block; margin-top:10px;
+  font-size:0.65rem; padding:3px 10px; border-radius:20px;
+  font-family:'Share Tech Mono',monospace; letter-spacing:1px;
+}
+.status-complete { background:rgba(0,245,255,0.1); color:var(--cyan); border:1px solid rgba(0,245,255,0.3); }
+.status-active { background:rgba(0,200,100,0.1); color:#00c864; border:1px solid rgba(0,200,100,0.3); }
+.status-pending { background:rgba(255,255,255,0.05); color:var(--silver); border:1px solid rgba(255,255,255,0.1); }
+
+/* ─── TEAM ─── */
+#team { background:linear-gradient(180deg, transparent, rgba(0,10,30,0.5), transparent); }
+.team-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; }
+.team-card {
+  background:var(--glass);
+  border:1px solid var(--glass-border);
+  border-radius:16px; padding:30px 20px;
+  text-align:center;
+  transition:all 0.4s;
+  position:relative; overflow:hidden;
+  cursor:default;
+}
+.team-card::before {
+  content:'';
+  position:absolute; inset:0;
+  background:radial-gradient(circle at center top, rgba(0,245,255,0.08), transparent 60%);
+  opacity:0; transition:opacity 0.4s;
+}
+.team-card:hover::before { opacity:1; }
+.team-card:hover {
+  border-color:var(--cyan);
+  box-shadow:0 0 40px rgba(0,245,255,0.2), 0 0 80px rgba(0,102,255,0.1);
+  transform:translateY(-8px);
+}
+.team-avatar {
+  width:90px; height:90px;
+  border-radius:50%; margin:0 auto 20px;
+  border:2px solid var(--glass-border);
+  overflow:hidden;
+  background:linear-gradient(135deg, rgba(0,30,60,0.8), rgba(0,60,100,0.6));
+  display:flex; align-items:center; justify-content:center;
+  font-size:2.5rem;
+  transition:border-color 0.3s;
+  position:relative; z-index:1;
+}
+.team-card:hover .team-avatar { border-color:var(--cyan); box-shadow:var(--glow-cyan); }
+.team-name {
+  font-family:'Orbitron',sans-serif; font-size:0.9rem;
+  color:var(--white); margin-bottom:4px; position:relative; z-index:1;
+}
+.team-role {
+  font-family:'Share Tech Mono',monospace; font-size:0.65rem;
+  color:var(--cyan); letter-spacing:2px; margin-bottom:16px;
+  position:relative; z-index:1;
+}
+.team-discipline {
+  font-size:0.75rem; color:var(--silver);
+  margin-bottom:14px; position:relative; z-index:1;
+  font-weight:500;
+}
+.team-bio {
+  font-size:0.78rem; color:rgba(139,168,200,0.8);
+  line-height:1.7; position:relative; z-index:1;
+}
+.team-tags { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin-top:14px; position:relative; z-index:1; }
+.team-tag {
+  font-size:0.6rem; padding:3px 8px; border-radius:20px;
+  background:rgba(0,245,255,0.06);
+  border:1px solid rgba(0,245,255,0.15);
+  color:var(--silver);
+}
+
+/* ─── GALLERY ─── */
+#gallery { background:linear-gradient(180deg, transparent, rgba(0,15,35,0.4), transparent); }
+.gallery-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.gallery-item {
+  position:relative; border-radius:10px; overflow:hidden;
+  border:1px solid var(--glass-border);
+  aspect-ratio:4/3;
+  cursor:pointer;
+  transition:all 0.3s;
+  background:rgba(0,20,50,0.6);
+  display:flex; align-items:center; justify-content:center;
+}
+.gallery-item:hover {
+  border-color:var(--cyan);
+  box-shadow:var(--glow-cyan);
+  transform:scale(1.02);
+}
+.gallery-item-inner {
+  width:100%; height:100%;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;
+}
+.gallery-icon { font-size:3rem; opacity:0.6; }
+.gallery-label {
+  font-family:'Share Tech Mono',monospace; font-size:0.65rem;
+  color:var(--silver); letter-spacing:2px;
+}
+.gallery-overlay {
+  position:absolute; inset:0;
+  background:rgba(0,245,255,0.06);
+  opacity:0; transition:opacity 0.3s;
+  display:flex; align-items:center; justify-content:center;
+}
+.gallery-item:hover .gallery-overlay { opacity:1; }
+.gallery-overlay-icon { font-size:2rem; }
+
+/* ─── LIGHTBOX ─── */
+.lightbox {
+  display:none; position:fixed; inset:0; z-index:9000;
+  background:rgba(0,0,0,0.92);
+  align-items:center; justify-content:center;
+}
+.lightbox.open { display:flex; animation:fadeIn 0.3s ease; }
+.lightbox-content {
+  background:rgba(1,8,24,0.95);
+  border:1px solid var(--glass-border);
+  border-radius:16px; padding:40px;
+  max-width:600px; width:90%;
+  text-align:center; position:relative;
+}
+.lightbox-close {
+  position:absolute; top:16px; right:20px;
+  font-size:1.5rem; color:var(--silver);
+  cursor:pointer; background:none; border:none;
+  transition:color 0.3s;
+}
+.lightbox-close:hover { color:var(--cyan); }
+.lightbox-icon { font-size:5rem; margin-bottom:20px; }
+.lightbox-title { font-family:'Orbitron',sans-serif; font-size:1.3rem; color:var(--cyan); margin-bottom:10px; }
+.lightbox-desc { color:var(--silver); font-size:0.9rem; line-height:1.8; }
+
+/* ─── IMPACT ─── */
+#impact { background:linear-gradient(180deg, transparent, rgba(0,20,50,0.4), transparent); }
+.impact-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:30px; }
+.impact-card {
+  background:var(--glass);
+  border:1px solid var(--glass-border);
+  border-radius:12px; padding:36px 28px;
+  transition:all 0.3s;
+  position:relative; overflow:hidden;
+}
+.impact-card::after {
+  content:'';
+  position:absolute; bottom:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg, var(--blue), var(--cyan));
+  opacity:0; transition:opacity 0.3s;
+}
+.impact-card:hover::after { opacity:1; }
+.impact-card:hover {
+  border-color:rgba(0,245,255,0.25);
+  box-shadow:var(--glow-cyan); transform:translateY(-4px);
+}
+.impact-icon { font-size:2.5rem; margin-bottom:20px; }
+.impact-card h3 {
+  font-family:'Orbitron',sans-serif; font-size:1rem;
+  color:var(--cyan); margin-bottom:14px;
+}
+.impact-card p { font-size:0.85rem; color:var(--silver); line-height:1.8; }
+.transfer-tags { display:flex; flex-wrap:wrap; gap:8px; margin-top:16px; }
+.transfer-tag {
+  font-size:0.7rem; padding:4px 12px;
+  border-radius:20px;
+  background:rgba(0,102,255,0.1);
+  border:1px solid rgba(0,102,255,0.25);
+  color:#6ea8ff;
+}
+
+/* ─── FOOTER ─── */
+footer {
+  position:relative; z-index:1;
+  background:rgba(1,8,16,0.98);
+  border-top:1px solid var(--glass-border);
+  padding:60px 40px 30px;
+}
+.footer-grid { display:grid; grid-template-columns:1.5fr 1fr 1fr; gap:60px; margin-bottom:50px; max-width:1200px; margin-left:auto; margin-right:auto; }
+.footer-brand { }
+.footer-logo {
+  font-family:'Orbitron',sans-serif; font-size:1.1rem;
+  color:var(--cyan); text-shadow:var(--glow-cyan);
+  letter-spacing:3px; margin-bottom:16px;
+}
+.footer-tagline { font-size:0.9rem; color:var(--silver); line-height:1.8; font-style:italic; }
+.footer-divider { width:40px; height:1px; background:var(--glass-border); margin:16px 0; }
+.footer-uni { font-size:0.8rem; color:var(--silver); }
+.footer-uni strong { color:var(--white); }
+.footer-col h4 {
+  font-family:'Share Tech Mono',monospace; font-size:0.7rem;
+  color:var(--cyan); letter-spacing:3px; margin-bottom:20px;
+}
+.footer-list { list-style:none; }
+.footer-list li { margin-bottom:10px; }
+.footer-list a, .footer-list span {
+  font-size:0.85rem; color:var(--silver); text-decoration:none;
+  transition:color 0.3s;
+}
+.footer-list a:hover { color:var(--cyan); }
+.footer-bottom {
+  max-width:1200px; margin:0 auto;
+  display:flex; justify-content:space-between; align-items:center;
+  padding-top:30px; border-top:1px solid var(--glass-border);
+  flex-wrap:wrap; gap:16px;
+}
+.footer-copy { font-size:0.75rem; color:rgba(139,168,200,0.6); font-family:'Share Tech Mono',monospace; }
+.footer-mission {
+  font-family:'Orbitron',sans-serif; font-size:0.8rem;
+  color:var(--cyan); letter-spacing:2px;
+  text-shadow:var(--glow-cyan);
+}
+.social-links { display:flex; gap:16px; }
+.social-link {
+  width:36px; height:36px;
+  border:1px solid var(--glass-border);
+  border-radius:6px; display:flex; align-items:center; justify-content:center;
+  color:var(--silver); text-decoration:none; font-size:1rem;
+  transition:all 0.3s;
+}
+.social-link:hover {
+  border-color:var(--cyan); color:var(--cyan);
+  box-shadow:var(--glow-cyan);
+}
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+@keyframes fadeInDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeInUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+@keyframes floatSuit { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-18px)} }
+@keyframes spinRing { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+@keyframes hotspotPulse {
+  0%,100%{box-shadow:0 0 0 0 rgba(0,245,255,0.4)}
+  50%{box-shadow:0 0 0 12px rgba(0,245,255,0)}
+}
+@keyframes vitalBlink { 0%,100%{opacity:1} 50%{opacity:0.7} }
+@keyframes alertBlink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+@keyframes dataFlow {
+  0%{background-position:0 0} 100%{background-position:100px 0}
+}
+@keyframes scrollPulse { 0%,100%{opacity:1;transform:scaleY(1)} 50%{opacity:0.4;transform:scaleY(0.6)} }
+@keyframes particleFloat {
+  0%{transform:translateY(0) translateX(0); opacity:0.6}
+  50%{opacity:1}
+  100%{transform:translateY(-100vh) translateX(20px); opacity:0}
+}
+
+/* scroll reveal */
+.reveal { opacity:0; transform:translateY(30px); transition:opacity 0.8s ease, transform 0.8s ease; }
+.reveal.visible { opacity:1; transform:translateY(0); }
+
+/* ─── MOBILE ─── */
+@media(max-width:900px){
+  nav { padding:0 20px; }
+  .nav-links { display:none; }
+  .nav-hamburger { display:flex; }
+  .nav-links.open {
+    display:flex; flex-direction:column;
+    position:fixed; top:70px; left:0; right:0;
+    background:rgba(1,8,16,0.97); padding:20px;
+    border-bottom:1px solid var(--glass-border);
+  }
+  section { padding:70px 20px; }
+  .about-grid, .hud-layout, .plss-layout, .gloves-layout, .electronics-layout { grid-template-columns:1fr; }
+  .overview-container { flex-direction:column; }
+  .suit-visual { width:100%; }
+  .team-grid { grid-template-columns:repeat(2,1fr); }
+  .gallery-grid { grid-template-columns:repeat(2,1fr); }
+  .materials-grid { grid-template-columns:1fr 1fr; }
+  .impact-grid { grid-template-columns:1fr; }
+  .footer-grid { grid-template-columns:1fr; gap:30px; }
+  .timeline-item, .timeline-item:nth-child(odd) { flex-direction:column; align-items:flex-start; }
+  .timeline-line { left:20px; }
+  .timeline-dot { left:20px; }
+  .timeline-content, .timeline-item:nth-child(odd) .timeline-content {
+    width:100%; margin-left:50px; margin-right:0; text-align:left;
+  }
+}
+@media(max-width:600px){
+  .team-grid { grid-template-columns:1fr; }
+  .gallery-grid { grid-template-columns:1fr; }
+  .materials-grid { grid-template-columns:1fr; }
+  .goals-grid { grid-template-columns:1fr; }
+  .spec-grid { grid-template-columns:1fr; }
+  .elec-specs { grid-template-columns:1fr; }
+  .footer-bottom { flex-direction:column; text-align:center; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">EVA-2026</div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#hud">HUD</a></li>
+    <li><a href="#plss">PLSS</a></li>
+    <li><a href="#electronics">Electronics</a></li>
+    <li><a href="#timeline">Process</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+  </ul>
+  <div class="nav-hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-badge">UTS ENGINEERING CAPSTONE 2026 &nbsp;///&nbsp; EVA SUIT DEVELOPMENT</div>
+  <h1 class="hero-title">Development of an<br>Astronaut Suit</h1>
+  <p class="hero-subtitle">Advanced EVA suit integrating life support, smart HUD, and assisted mobility systems for next-generation space exploration.</p>
+
+  <div class="hero-suit">
+    <div class="hero-ring"></div>
+    <div class="hero-ring"></div>
+    <div class="hero-ring"></div>
+    <svg class="suit-svg" viewBox="0 0 300 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Helmet -->
+      <ellipse cx="150" cy="80" rx="68" ry="72" fill="rgba(0,30,60,0.9)" stroke="#00f5ff" stroke-width="1.5"/>
+      <ellipse cx="150" cy="80" rx="52" ry="56" fill="rgba(0,245,255,0.08)" stroke="#00f5ff" stroke-width="0.8" stroke-dasharray="4 3"/>
+      <!-- Visor -->
+      <ellipse cx="150" cy="82" rx="38" ry="34" fill="rgba(0,100,200,0.3)" stroke="#00aaff" stroke-width="1"/>
+      <ellipse cx="150" cy="82" rx="38" ry="34" fill="url(#visorGrad)"/>
+      <!-- HUD lines in visor -->
+      <line x1="120" y1="68" x2="180" y2="68" stroke="rgba(0,245,255,0.3)" stroke-width="0.5"/>
+      <line x1="120" y1="78" x2="180" y2="78" stroke="rgba(0,245,255,0.2)" stroke-width="0.5"/>
+      <line x1="120" y1="88" x2="180" y2="88" stroke="rgba(0,245,255,0.2)" stroke-width="0.5"/>
+      <line x1="120" y1="98" x2="180" y2="98" stroke="rgba(0,245,255,0.3)" stroke-width="0.5"/>
+      <line x1="132" y1="60" x2="132" y2="106" stroke="rgba(0,245,255,0.15)" stroke-width="0.5"/>
+      <line x1="168" y1="60" x2="168" y2="106" stroke="rgba(0,245,255,0.15)" stroke-width="0.5"/>
+      <!-- Helmet details -->
+      <rect x="118" y="138" width="64" height="14" rx="4" fill="rgba(0,30,60,0.8)" stroke="#00f5ff" stroke-width="1"/>
+      <!-- Neck ring -->
+      <rect x="110" y="148" width="80" height="12" rx="3" fill="rgba(0,60,120,0.6)" stroke="#006fff" stroke-width="1"/>
+      <!-- Torso -->
+      <path d="M72 160 L80 340 L220 340 L228 160 Q210 148 150 148 Q90 148 72 160Z"
+            fill="rgba(0,20,50,0.9)" stroke="#00f5ff" stroke-width="1.2"/>
+      <!-- Chest panel -->
+      <rect x="110" y="175" width="80" height="60" rx="8" fill="rgba(0,245,255,0.06)" stroke="#00aaff" stroke-width="1"/>
+      <rect x="118" y="183" width="28" height="18" rx="3" fill="rgba(0,100,200,0.2)" stroke="#00f5ff" stroke-width="0.6"/>
+      <rect x="154" y="183" width="28" height="18" rx="3" fill="rgba(0,200,100,0.15)" stroke="#00c864" stroke-width="0.6"/>
+      <circle cx="132" cy="215" r="6" fill="none" stroke="#00f5ff" stroke-width="0.8"/>
+      <circle cx="150" cy="215" r="6" fill="none" stroke="#ff6400" stroke-width="0.8"/>
+      <circle cx="168" cy="215" r="6" fill="none" stroke="#00c864" stroke-width="0.8"/>
+      <!-- Left arm -->
+      <path d="M72 165 L40 180 L30 290 L58 295 L68 200 L80 185Z"
+            fill="rgba(0,20,50,0.9)" stroke="#00f5ff" stroke-width="1"/>
+      <!-- Right arm -->
+      <path d="M228 165 L260 180 L270 290 L242 295 L232 200 L220 185Z"
+            fill="rgba(0,20,50,0.9)" stroke="#00f5ff" stroke-width="1"/>
+      <!-- Left glove -->
+      <path d="M30 290 L22 310 L25 330 L50 335 L58 310 L58 295Z"
+            fill="rgba(0,30,70,0.9)" stroke="#00f5ff" stroke-width="1"/>
+      <!-- Right glove -->
+      <path d="M270 290 L278 310 L275 330 L250 335 L242 310 L242 295Z"
+            fill="rgba(0,30,70,0.9)" stroke="#00f5ff" stroke-width="1"/>
+      <!-- PLSS backpack lines -->
+      <rect x="200" y="170" width="30" height="100" rx="4" fill="rgba(0,245,255,0.04)" stroke="rgba(0,245,255,0.3)" stroke-width="0.8" stroke-dasharray="3 2"/>
+      <!-- Torso panel lines -->
+      <line x1="150" y1="160" x2="150" y2="340" stroke="rgba(0,245,255,0.1)" stroke-width="0.5"/>
+      <line x1="80" y1="240" x2="220" y2="240" stroke="rgba(0,245,255,0.08)" stroke-width="0.5"/>
+      <!-- Belt / waist ring -->
+      <rect x="76" y="330" width="148" height="16" rx="4" fill="rgba(0,60,120,0.6)" stroke="#006fff" stroke-width="1"/>
+      <!-- Legs -->
+      <path d="M80 346 L76 460 L110 464 L120 380 L150 375 L180 380 L190 464 L224 460 L220 346Z"
+            fill="rgba(0,20,50,0.9)" stroke="#00f5ff" stroke-width="1.2"/>
+      <!-- Boots -->
+      <path d="M76 460 L68 490 L88 500 L112 496 L110 464Z"
+            fill="rgba(0,30,70,0.9)" stroke="#00f5ff" stroke-width="1"/>
+      <path d="M224 460 L232 490 L212 500 L188 496 L190 464Z"
+            fill="rgba(0,30,70,0.9)" stroke="#00f5ff" stroke-width="1"/>
+      <!-- Tech detail lines on legs -->
+      <line x1="88" y1="390" x2="108" y2="390" stroke="rgba(0,245,255,0.2)" stroke-width="0.5"/>
+      <line x1="192" y1="390" x2="212" y2="390" stroke="rgba(0,245,255,0.2)" stroke-width="0.5"/>
+      <line x1="88" y1="420" x2="108" y2="420" stroke="rgba(0,245,255,0.15)" stroke-width="0.5"/>
+      <line x1="192" y1="420" x2="212" y2="420" stroke="rgba(0,245,255,0.15)" stroke-width="0.5"/>
+      <!-- Shoulder rings -->
+      <ellipse cx="80" cy="175" rx="16" ry="10" fill="rgba(0,60,120,0.5)" stroke="#006fff" stroke-width="0.8"/>
+      <ellipse cx="220" cy="175" rx="16" ry="10" fill="rgba(0,60,120,0.5)" stroke="#006fff" stroke-width="0.8"/>
+      <!-- Knee pads -->
+      <ellipse cx="97" cy="418" rx="18" ry="12" fill="rgba(0,40,90,0.5)" stroke="rgba(0,245,255,0.3)" stroke-width="0.8"/>
+      <ellipse cx="203" cy="418" rx="18" ry="12" fill="rgba(0,40,90,0.5)" stroke="rgba(0,245,255,0.3)" stroke-width="0.8"/>
+      <defs>
+        <radialGradient id="visorGrad" cx="40%" cy="35%">
+          <stop offset="0%" stop-color="rgba(0,180,255,0.4)"/>
+          <stop offset="100%" stop-color="rgba(0,20,80,0.2)"/>
+        </radialGradient>
+      </defs>
+    </svg>
+  </div>
+
+  <div class="hero-btns">
+    <a href="#overview" class="btn-primary">Explore Suit</a>
+    <a href="#team" class="btn-secondary">Meet the Team</a>
+  </div>
+
+  <div class="scroll-indicator">
+    <span>SCROLL</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid reveal">
+      <div class="about-text">
+        <div class="section-label">// 01 — ABOUT THE PROJECT</div>
+        <h2 class="section-title">Next-Generation EVA Suit</h2>
+        <div class="section-line"></div>
+        <p>This capstone project focuses on designing and developing a next-generation astronaut suit for extravehicular activities (EVA). The suit improves astronaut safety, mobility, situational awareness, and survivability in extreme environments through integrated electronics, embedded systems, and mechanical design.</p>
+        <p>Engineered at the University of Technology Sydney, this project bridges aerospace engineering, embedded systems, mechanical design, and human factors to produce a comprehensive life support and mobility platform for future space missions.</p>
+        <div class="goals-grid">
+          <div class="goal-card"><span class="goal-icon">🛡️</span><span>Improve astronaut safety</span></div>
+          <div class="goal-card"><span class="goal-icon">❤️</span><span>Real-time health monitoring</span></div>
+          <div class="goal-card"><span class="goal-icon">🌡️</span><span>Environmental sensing</span></div>
+          <div class="goal-card"><span class="goal-icon">⚡</span><span>Enhanced mobility</span></div>
+          <div class="goal-card"><span class="goal-icon">⏱️</span><span>Reduced fatigue</span></div>
+          <div class="goal-card"><span class="goal-icon">🚀</span><span>Long-duration missions</span></div>
+        </div>
+      </div>
+      <div class="about-visual">
+        <div class="about-hex">
+          <div class="stats-grid">
+            <div class="stat-item"><div class="stat-num">7</div><div class="stat-label">SUBSYSTEMS</div></div>
+            <div class="stat-item"><div class="stat-num">4</div><div class="stat-label">ENGINEERS</div></div>
+            <div class="stat-item"><div class="stat-num">12</div><div class="stat-label">SENSORS</div></div>
+            <div class="stat-item"><div class="stat-num">2026</div><div class="stat-label">CAPSTONE</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">// 02 — SUIT OVERVIEW</div>
+      <h2 class="section-title">Full Suit Architecture</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="subsystem-tabs reveal">
+      <button class="sub-tab active" onclick="showInfo('helmet')">Helmet HUD</button>
+      <button class="sub-tab" onclick="showInfo('plss-tab')">PLSS</button>
+      <button class="sub-tab" onclick="showInfo('gloves-tab')">Exo Gloves</button>
+      <button class="sub-tab" onclick="showInfo('body-tab')">Suit Body</button>
+      <button class="sub-tab" onclick="showInfo('chest-tab')">Chest Interface</button>
+      <button class="sub-tab" onclick="showInfo('sensors-tab')">Sensors</button>
+      <button class="sub-tab" onclick="showInfo('power-tab')">Power System</button>
+    </div>
+    <div class="overview-container reveal">
+      <div class="suit-visual">
+        <div class="suit-diagram">
+          <!-- Simplified suit with hotspots -->
+          <svg viewBox="0 0 300 520" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+            <ellipse cx="150" cy="80" rx="68" ry="72" fill="rgba(0,30,60,0.9)" stroke="#00f5ff" stroke-width="1.5"/>
+            <ellipse cx="150" cy="82" rx="38" ry="34" fill="rgba(0,100,200,0.3)" stroke="#00aaff" stroke-width="1"/>
+            <ellipse cx="150" cy="82" rx="38" ry="34" fill="url(#visorGrad2)"/>
+            <rect x="110" y="148" width="80" height="12" rx="3" fill="rgba(0,60,120,0.6)" stroke="#006fff" stroke-width="1"/>
+            <path d="M72 160 L80 340 L220 340 L228 160 Q210 148 150 148 Q90 148 72 160Z" fill="rgba(0,20,50,0.9)" stroke="#00f5ff" stroke-width="1.2"/>
+            <rect x="110" y="175" width="80" height="60" rx="8" fill="rgba(0,245,255,0.06)" stroke="#00aaff" stroke-width="1"/>
+            <path d="M72 165 L40 180 L30 290 L58 295 L68 200 L80 185Z" fill="rgba(0,20,50,0.9)" stroke="#00f5ff" stroke-width="1"/>
+            <path d="M228 165 L260 180 L270 290 L242 295 L232 200 L220 185Z" fill="rgba(0,20,50,0.9)" stroke="#00f5ff" stroke-width="1"/>
+            <path d="M30 290 L22 310 L25 330 L50 335 L58 310 L58 295Z" fill="rgba(0,30,70,0.9)" stroke="#00f5ff" stroke-width="1"/>
+            <path d="M270 290 L278 310 L275 330 L250 335 L242 310 L242 295Z" fill="rgba(0,30,70,0.9)" stroke="#00f5ff" stroke-width="1"/>
+            <rect x="76" y="330" width="148" height="16" rx="4" fill="rgba(0,60,120,0.6)" stroke="#006fff" stroke-width="1"/>
+            <path d="M80 346 L76 460 L110 464 L120 380 L150 375 L180 380 L190 464 L224 460 L220 346Z" fill="rgba(0,20,50,0.9)" stroke="#00f5ff" stroke-width="1.2"/>
+            <path d="M76 460 L68 490 L88 500 L112 496 L110 464Z" fill="rgba(0,30,70,0.9)" stroke="#00f5ff" stroke-width="1"/>
+            <path d="M224 460 L232 490 L212 500 L188 496 L190 464Z" fill="rgba(0,30,70,0.9)" stroke="#00f5ff" stroke-width="1"/>
+            <defs>
+              <radialGradient id="visorGrad2" cx="40%" cy="35%">
+                <stop offset="0%" stop-color="rgba(0,180,255,0.4)"/>
+                <stop offset="100%" stop-color="rgba(0,20,80,0.2)"/>
+              </radialGradient>
+            </defs>
+          </svg>
+          <!-- Hotspots positioned over the SVG -->
+          <div class="hotspot" style="top:8%;left:50%;transform:translate(-50%,0)" data-label="Helmet HUD" data-target="helmet" onclick="showInfo('helmet')"><div class="hotspot-dot"></div></div>
+          <div class="hotspot left" style="top:28%;left:4%" data-label="PLSS" data-target="plss-tab" onclick="showInfo('plss-tab')"><div class="hotspot-dot"></div></div>
+          <div class="hotspot" style="top:40%;left:35%" data-label="Chest Interface" data-target="chest-tab" onclick="showInfo('chest-tab')"><div class="hotspot-dot"></div></div>
+          <div class="hotspot left" style="top:54%;left:4%" data-label="Exo Gloves" data-target="gloves-tab" onclick="showInfo('gloves-tab')"><div class="hotspot-dot"></div></div>
+          <div class="hotspot" style="top:54%;right:4%;left:auto" data-label="Sensors" data-target="sensors-tab" onclick="showInfo('sensors-tab')"><div class="hotspot-dot"></div></div>
+          <div class="hotspot" style="top:70%;left:50%;transform:translate(-50%,0)" data-label="Suit Body" data-target="body-tab" onclick="showInfo('body-tab')"><div class="hotspot-dot"></div></div>
+          <div class="hotspot" style="top:84%;left:50%;transform:translate(-50%,0)" data-label="Power System" data-target="power-tab" onclick="showInfo('power-tab')"><div class="hotspot-dot"></div></div>
+        </div>
+      </div>
+      <div class="suit-info-panel">
+        <div class="info-card active" id="info-helmet">
+          <div class="info-card-title">Helmet HUD</div>
+          <div class="info-card-sub">Head-Up Display System</div>
+          <p>The helmet-integrated Head-Up Display provides astronauts with real-time critical data overlaid on their field of view, eliminating the need to look away from the task at hand. The transparent OLED display projects telemetry directly onto the visor surface.</p>
+          <ul class="info-list">
+            <li>Heart rate monitoring (BPM)</li>
+            <li>SpO₂ blood oxygen saturation</li>
+            <li>Internal and external temperature</li>
+            <li>Remaining oxygen levels</li>
+            <li>CO₂ concentration alerts</li>
+            <li>Suit pressure warnings</li>
+            <li>Battery level indicator</li>
+          </ul>
+        </div>
+        <div class="info-card" id="info-plss-tab">
+          <div class="info-card-title">PLSS — Portable Life Support System</div>
+          <div class="info-card-sub">Primary Life Support Backpack</div>
+          <p>The PLSS is the backbone of astronaut survivability. This integrated backpack system manages all life-critical functions including oxygen supply, CO₂ scrubbing, temperature control, and emergency reserves throughout the entire EVA duration.</p>
+          <ul class="info-list">
+            <li>Primary oxygen supply tanks</li>
+            <li>CO₂ removal via LiOH scrubbers</li>
+            <li>Active thermal regulation loops</li>
+            <li>Forced air circulation fans</li>
+            <li>High-density battery pack</li>
+            <li>Emergency backup O₂ system</li>
+          </ul>
+        </div>
+        <div class="info-card" id="info-gloves-tab">
+          <div class="info-card-title">Exoskeleton Gloves</div>
+          <div class="info-card-sub">Assisted Dexterity System</div>
+          <p>Traditional EVA gloves reduce grip strength by up to 60%. Our exoskeleton glove system uses servo-assisted mechanisms and flex sensors to amplify grip strength, reduce fatigue, and maintain precision during critical tool operations.</p>
+          <ul class="info-list">
+            <li>Servo-assisted grip amplification</li>
+            <li>Flex sensor array (per finger)</li>
+            <li>Reduced hand fatigue by ~70%</li>
+            <li>Tactile feedback preservation</li>
+            <li>Tool-lock precision assist</li>
+            <li>Thermal hand warming elements</li>
+          </ul>
+        </div>
+        <div class="info-card" id="info-body-tab">
+          <div class="info-card-title">Suit Body</div>
+          <div class="info-card-sub">Structural & Pressure Shell</div>
+          <p>The primary suit body serves as the pressure barrier between the astronaut and the vacuum of space. Multiple layers of advanced materials work together to maintain internal pressure, thermal control, and protection from micrometeorite impacts.</p>
+          <ul class="info-list">
+            <li>Multi-layer pressure retention</li>
+            <li>Thermal micro-meteorite shield</li>
+            <li>Lightweight titanium structural joints</li>
+            <li>Embedded cable routing channels</li>
+            <li>Modular assembly connectors</li>
+            <li>Radiation shielding layer</li>
+          </ul>
+        </div>
+        <div class="info-card" id="info-chest-tab">
+          <div class="info-card-title">Chest Control Interface</div>
+          <div class="info-card-sub">Primary Mission Control Panel</div>
+          <p>The chest-mounted interface provides the astronaut with direct tactile access to all critical suit systems without requiring fine dexterity. Large, glove-compatible controls and a bright OLED display allow rapid system monitoring and adjustment.</p>
+          <ul class="info-list">
+            <li>Central OLED status display</li>
+            <li>Oxygen flow rate control</li>
+            <li>Temperature setpoint adjustment</li>
+            <li>Emergency system toggles</li>
+            <li>Communication system controls</li>
+            <li>Battery status indicators</li>
+          </ul>
+        </div>
+        <div class="info-card" id="info-sensors-tab">
+          <div class="info-card-title">Sensor Array</div>
+          <div class="info-card-sub">Environmental & Biometric Sensing</div>
+          <p>A distributed network of sensors throughout the suit continuously monitors both the astronaut's biometrics and the external environment. All data is processed by the onboard ESP32-C3 and transmitted to the HUD and ground control in real time.</p>
+          <ul class="info-list">
+            <li>MAX30102 pulse oximeter</li>
+            <li>BME280 environmental sensor</li>
+            <li>Radiation dosimeter</li>
+            <li>Suit pressure transducers</li>
+            <li>CO₂ NDIR gas sensor</li>
+            <li>IMU motion tracking</li>
+          </ul>
+        </div>
+        <div class="info-card" id="info-power-tab">
+          <div class="info-card-title">Power System</div>
+          <div class="info-card-sub">Distributed Energy Management</div>
+          <p>A high-density lithium polymer battery system distributed across the PLSS and suit body provides reliable power to all subsystems. Smart power management firmware dynamically allocates power based on mission phase and system priority.</p>
+          <ul class="info-list">
+            <li>High-density LiPo primary cells</li>
+            <li>Redundant emergency battery</li>
+            <li>Smart power distribution PCB</li>
+            <li>Solar trickle charge capability</li>
+            <li>Low-power sleep modes</li>
+            <li>8+ hour EVA battery life</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HUD -->
+<section id="hud">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">// 03 — HELMET HUD</div>
+      <h2 class="section-title">Head-Up Display System</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="hud-layout reveal">
+      <div class="hud-display">
+        <div class="hud-screen">
+          <div class="hud-grid-lines"></div>
+          <div class="hud-corner tl"></div>
+          <div class="hud-corner tr"></div>
+          <div class="hud-corner bl"></div>
+          <div class="hud-corner br"></div>
+          <div class="hud-vitals">
+            <div class="vital-item">
+              <div class="vital-label">HEART RATE</div>
+              <div class="vital-value" id="hrVal">72</div>
+              <div class="vital-unit">BPM</div>
+            </div>
+            <div class="vital-item">
+              <div class="vital-label">SpO₂</div>
+              <div class="vital-value" id="spo2Val">98</div>
+              <div class="vital-unit">%</div>
+            </div>
+            <div class="vital-item">
+              <div class="vital-label">O₂ LEVEL</div>
+              <div class="vital-value" id="o2Val">94</div>
+              <div class="vital-unit">%</div>
+            </div>
+            <div class="vital-item">
+              <div class="vital-label">SUIT TEMP</div>
+              <div class="vital-value" id="tmpVal">21</div>
+              <div class="vital-unit">°C</div>
+            </div>
+            <div class="vital-item">
+              <div class="vital-label">PRESSURE</div>
+              <div class="vital-value">4.3</div>
+              <div class="vital-unit">PSI</div>
+            </div>
+            <div class="vital-item">
+              <div class="vital-label">BATTERY</div>
+              <div class="vital-value">87</div>
+              <div class="vital-unit">%</div>
+            </div>
+          </div>
+          <div class="hud-alert">⚠ CO₂ MONITOR ACTIVE — NOMINAL</div>
+        </div>
+      </div>
+      <div class="hud-metrics">
+        <p style="color:var(--silver);line-height:1.9;margin-bottom:24px;font-weight:300;">The helmet-integrated HUD provides astronauts with a real-time overlay of all critical mission data. Transparent OLED panels project telemetry directly onto the visor without obstructing visibility.</p>
+        <div class="metric-bar">
+          <div class="metric-label"><span>O₂ SUPPLY</span><span>94%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:94%"></div></div>
+        </div>
+        <div class="metric-bar">
+          <div class="metric-label"><span>BATTERY</span><span>87%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:87%"></div></div>
+        </div>
+        <div class="metric-bar">
+          <div class="metric-label"><span>CO₂ SCRUBBER</span><span>76%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:76%"></div></div>
+        </div>
+        <div class="metric-bar">
+          <div class="metric-label"><span>THERMAL CONTROL</span><span>100%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:100%"></div></div>
+        </div>
+        <div class="metric-bar">
+          <div class="metric-label"><span>COMM SIGNAL</span><span>82%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:82%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLSS -->
+<section id="plss">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">// 04 — LIFE SUPPORT</div>
+      <h2 class="section-title">Portable Life Support System</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="plss-layout reveal">
+      <div class="plss-visual">
+        <div class="plss-box">
+          <div class="plss-label">PLSS UNIT</div>
+          <div class="plss-icon-row">
+            <div class="plss-module">🫁<span>O₂ SUPPLY</span></div>
+            <div class="plss-module">💨<span>CO₂ SCRUB</span></div>
+            <div class="plss-module">🌡️<span>THERMAL</span></div>
+          </div>
+          <div class="plss-icon-row">
+            <div class="plss-module">🔋<span>BATTERY</span></div>
+            <div class="plss-module">💧<span>H₂O LOOP</span></div>
+            <div class="plss-module">🆘<span>EMERGENCY</span></div>
+          </div>
+          <div style="width:100%;height:1px;background:var(--glass-border);margin:10px 0"></div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--cyan);letter-spacing:2px;text-align:center">ALL SYSTEMS NOMINAL</div>
+        </div>
+      </div>
+      <div class="plss-info">
+        <p>The Portable Life Support System is the most critical subsystem of any EVA suit. Without it, an astronaut cannot survive in the vacuum of space. Our PLSS design integrates all life-critical functions into a compact, reliable backpack unit.</p>
+        <p>The system ensures continuous oxygen delivery, removes exhaled CO₂, maintains comfortable internal temperature, and provides redundant safety systems to protect the astronaut at all times during extravehicular activities.</p>
+        <div class="spec-grid">
+          <div class="spec-card"><div class="spec-card-title">O₂ SUPPLY</div><div class="spec-card-val">8+ Hour Capacity</div></div>
+          <div class="spec-card"><div class="spec-card-title">CO₂ REMOVAL</div><div class="spec-card-val">LiOH Scrubbers</div></div>
+          <div class="spec-card"><div class="spec-card-title">TEMP CONTROL</div><div class="spec-card-val">18–26°C Range</div></div>
+          <div class="spec-card"><div class="spec-card-title">AIR FLOW</div><div class="spec-card-val">170 L/min</div></div>
+          <div class="spec-card"><div class="spec-card-title">BATTERY</div><div class="spec-card-val">High-Density LiPo</div></div>
+          <div class="spec-card"><div class="spec-card-title">EMERGENCY</div><div class="spec-card-val">30-min Backup O₂</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GLOVES -->
+<section id="gloves">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">// 05 — EXOSKELETON GLOVES</div>
+      <h2 class="section-title">Assisted Dexterity System</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="gloves-layout reveal">
+      <div class="glove-visual">
+        <div class="glove-svg-wrap">
+          <svg class="wireframe-glow" viewBox="0 0 200 280" fill="none" xmlns="http://www.w3.org/2000/svg" width="260" height="320">
+            <!-- Palm -->
+            <rect x="50" y="120" width="100" height="100" rx="14" fill="rgba(0,30,70,0.6)" stroke="#00f5ff" stroke-width="1.2"/>
+            <!-- Thumb -->
+            <path d="M50 140 L20 115 L18 100 L30 92 L44 105 L50 125Z" fill="rgba(0,20,60,0.6)" stroke="#00f5ff" stroke-width="1"/>
+            <!-- Index -->
+            <rect x="112" y="60" width="22" height="68" rx="8" fill="rgba(0,20,60,0.6)" stroke="#00f5ff" stroke-width="1"/>
+            <!-- Middle -->
+            <rect x="84" y="50" width="22" height="74" rx="8" fill="rgba(0,20,60,0.6)" stroke="#00f5ff" stroke-width="1"/>
+            <!-- Ring -->
+            <rect x="56" y="56" width="22" height="70" rx="8" fill="rgba(0,20,60,0.6)" stroke="#00f5ff" stroke-width="1"/>
+            <!-- Pinky -->
+            <rect x="140" y="74" width="18" height="56" rx="8" fill="rgba(0,20,60,0.6)" stroke="#00f5ff" stroke-width="1"/>
+            <!-- Knuckle lines -->
+            <line x1="50" y1="120" x2="150" y2="120" stroke="rgba(0,245,255,0.2)" stroke-width="0.7"/>
+            <!-- Wrist -->
+            <rect x="55" y="218" width="90" height="44" rx="10" fill="rgba(0,30,70,0.6)" stroke="#00aaff" stroke-width="1"/>
+            <!-- PCB on wrist -->
+            <rect x="66" y="228" width="68" height="24" rx="4" fill="rgba(0,245,255,0.05)" stroke="rgba(0,245,255,0.3)" stroke-width="0.6"/>
+            <line x1="75" y1="234" x2="125" y2="234" stroke="rgba(0,245,255,0.3)" stroke-width="0.5"/>
+            <line x1="75" y1="240" x2="125" y2="240" stroke="rgba(0,245,255,0.2)" stroke-width="0.5"/>
+            <circle cx="85" cy="237" r="3" fill="none" stroke="rgba(0,245,255,0.5)" stroke-width="0.8"/>
+            <circle cx="100" cy="237" r="3" fill="none" stroke="rgba(0,245,255,0.5)" stroke-width="0.8"/>
+            <circle cx="115" cy="237" r="3" fill="none" stroke="rgba(0,245,255,0.5)" stroke-width="0.8"/>
+            <!-- Servo indicators on fingers -->
+            <circle cx="123" cy="85" r="4" fill="rgba(0,245,255,0.1)" stroke="#00f5ff" stroke-width="0.8"/>
+            <circle cx="95" cy="76" r="4" fill="rgba(0,245,255,0.1)" stroke="#00f5ff" stroke-width="0.8"/>
+            <circle cx="67" cy="80" r="4" fill="rgba(0,245,255,0.1)" stroke="#00f5ff" stroke-width="0.8"/>
+            <circle cx="149" cy="95" r="3" fill="rgba(0,245,255,0.1)" stroke="#00f5ff" stroke-width="0.8"/>
+            <!-- Tech overlay lines -->
+            <line x1="50" y1="165" x2="150" y2="165" stroke="rgba(0,245,255,0.1)" stroke-width="0.5" stroke-dasharray="3 3"/>
+            <line x1="100" y1="120" x2="100" y2="218" stroke="rgba(0,245,255,0.1)" stroke-width="0.5" stroke-dasharray="3 3"/>
+          </svg>
+        </div>
+      </div>
+      <div class="glove-features">
+        <div class="feature-row">
+          <div class="feature-num">01</div>
+          <div class="feature-text">
+            <h4>Assisted Grip Strength</h4>
+            <p>Servo motors amplify grip force by up to 40%, countering the stiffness of pressurized gloves in vacuum environments.</p>
+          </div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-num">02</div>
+          <div class="feature-text">
+            <h4>Reduced Hand Fatigue</h4>
+            <p>Exoskeleton frame offloads repetitive strain during extended tool operations, reducing fatigue by approximately 70%.</p>
+          </div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-num">03</div>
+          <div class="feature-text">
+            <h4>Enhanced Dexterity</h4>
+            <p>Flex sensor array on each finger maps hand motion precisely, preserving natural movement while adding power assistance.</p>
+          </div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-num">04</div>
+          <div class="feature-text">
+            <h4>Precision Tool Usage</h4>
+            <p>Sensor-assisted movement stabilization reduces tremor during fine manipulation tasks such as bolt fastening or connector mating.</p>
+          </div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-num">05</div>
+          <div class="feature-text">
+            <h4>Thermal Hand Warming</h4>
+            <p>Embedded heating elements maintain optimal hand temperature in the extreme cold of shadow regions during EVA.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MATERIALS -->
+<section id="materials">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">// 06 — MATERIALS & ENGINEERING</div>
+      <h2 class="section-title">Suit Construction</h2>
+      <div class="section-line"></div>
+      <p style="color:var(--silver);max-width:650px;line-height:1.9;margin-bottom:40px;font-weight:300;">
+        The suit body integrates multiple material layers, each serving a critical function. The design prioritizes minimizing mass while maximizing protection, thermal performance, and structural integrity.
+      </p>
+    </div>
+    <div class="materials-grid reveal">
+      <div class="material-card">
+        <div class="material-icon">🛡️</div>
+        <h3>Outer Protective Shell</h3>
+        <p>High-durability Ortho-Fabric outer layer resistant to abrasion, micrometeorite impact, and UV radiation. Provides the first line of defense against the space environment.</p>
+      </div>
+      <div class="material-card">
+        <div class="material-icon">🌡️</div>
+        <h3>Thermal Insulation</h3>
+        <p>Multi-layer insulation (MLI) with aluminized Mylar and Dacron spacer layers. Maintains internal temperature across the extreme range of −160°C to +120°C.</p>
+      </div>
+      <div class="material-card">
+        <div class="material-icon">💨</div>
+        <h3>Pressure Retention</h3>
+        <p>Neoprene-coated nylon bladder layer maintains the pressurized atmosphere essential for astronaut survival, engineered for zero-leak performance under cyclic loading.</p>
+      </div>
+      <div class="material-card">
+        <div class="material-icon">🔩</div>
+        <h3>Structural Supports</h3>
+        <p>Lightweight titanium alloy bearings and carbon fiber reinforced polymer joints provide the structural rigidity required at pressure joints while minimizing added mass.</p>
+      </div>
+      <div class="material-card">
+        <div class="material-icon">⚡</div>
+        <h3>Embedded Electronics</h3>
+        <p>Flexible PCB traces routed through dedicated channels within suit layers. All electronics are radiation-hardened and sealed against outgassing in vacuum.</p>
+      </div>
+      <div class="material-card">
+        <div class="material-icon">⚖️</div>
+        <h3>Weight Optimization</h3>
+        <p>Every component selected through mass-budget analysis. Target suit weight under 40 kg dry mass (excluding PLSS) through strategic use of advanced composites and additive manufacturing.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ELECTRONICS -->
+<section id="electronics">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">// 07 — ELECTRONICS & EMBEDDED SYSTEMS</div>
+      <h2 class="section-title">System Architecture</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="electronics-layout reveal">
+      <div class="circuit-display">
+        <div class="circuit-bg"></div>
+        <div class="circuit-nodes">
+          <div class="node-row">
+            <div class="node">🧠<div class="node-label">ESP32-C3<br>MCU</div></div>
+            <div class="node">📟<div class="node-label">OLED<br>DISPLAY</div></div>
+            <div class="node">📡<div class="node-label">COMM<br>MODULE</div></div>
+          </div>
+          <div class="connect-row">
+            <div class="node-connector"></div>
+          </div>
+          <div class="node-row">
+            <div class="node">❤️<div class="node-label">PULSE OX<br>SENSOR</div></div>
+            <div class="node">🔌<div class="node-label">POWER<br>MGMT</div></div>
+            <div class="node">🌡️<div class="node-label">ENV<br>SENSOR</div></div>
+          </div>
+          <div class="connect-row">
+            <div class="node-connector"></div>
+          </div>
+          <div class="node-row">
+            <div class="node">🔋<div class="node-label">LIPO<br>CELLS</div></div>
+            <div class="node">📋<div class="node-label">CUSTOM<br>PCB</div></div>
+            <div class="node">🏃<div class="node-label">IMU<br>6-DOF</div></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p style="color:var(--silver);line-height:1.9;margin-bottom:28px;font-weight:300;">The electronics architecture is built around the ESP32-C3 microcontroller, providing dual-core processing, integrated WiFi/BLE connectivity, and a rich peripheral set — all in a radiation-tolerant, low-power package suited for space environments.</p>
+        <div class="elec-specs">
+          <div class="elec-spec"><div class="elec-spec-label">MICROCONTROLLER</div><div class="elec-spec-val">ESP32-C3 RISC-V</div></div>
+          <div class="elec-spec"><div class="elec-spec-label">DISPLAY</div><div class="elec-spec-val">128×64 OLED (SSD1306)</div></div>
+          <div class="elec-spec"><div class="elec-spec-label">PULSE OXIMETER</div><div class="elec-spec-val">MAX30102</div></div>
+          <div class="elec-spec"><div class="elec-spec-label">ENV SENSOR</div><div class="elec-spec-val">BME280 (T/H/P)</div></div>
+          <div class="elec-spec"><div class="elec-spec-label">CONNECTIVITY</div><div class="elec-spec-val">WiFi + BLE 5.0</div></div>
+          <div class="elec-spec"><div class="elec-spec-label">PCB LAYERS</div><div class="elec-spec-val">4-Layer Custom FR4</div></div>
+          <div class="elec-spec"><div class="elec-spec-label">POWER INPUT</div><div class="elec-spec-val">3.3V / 5V Rails</div></div>
+          <div class="elec-spec"><div class="elec-spec-label">IMU</div><div class="elec-spec-val">MPU-6050 6-DOF</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section id="timeline">
+  <div class="container">
+    <div class="reveal" style="text-align:center;margin-bottom:60px">
+      <div class="section-label">// 08 — ENGINEERING PROCESS</div>
+      <h2 class="section-title">Development Timeline</h2>
+      <div class="section-line" style="margin:0 auto 0"></div>
+    </div>
+    <div class="timeline-track reveal">
+      <div class="timeline-line"></div>
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <div class="timeline-phase">PHASE 01</div>
+          <h3>Research & Requirements</h3>
+          <p>Literature review of existing EVA suit designs, analysis of astronaut ergonomic data, and definition of system requirements. Benchmarking against NASA EMU and SpaceX IVA suit specifications.</p>
+          <span class="timeline-status status-complete">COMPLETE</span>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <div class="timeline-phase">PHASE 02</div>
+          <h3>Concept Development</h3>
+          <p>Generation of multiple design concepts across all subsystems. Feasibility analysis, trade studies, and selection of optimal architecture for each module including HUD, PLSS, and exoskeleton gloves.</p>
+          <span class="timeline-status status-complete">COMPLETE</span>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <div class="timeline-phase">PHASE 03</div>
+          <h3>CAD Design</h3>
+          <p>Full 3D modelling of all structural components in SolidWorks. Stress analysis on pressure vessels, thermal simulation on insulation stack-up, and assembly interference checking across all 200+ components.</p>
+          <span class="timeline-status status-complete">COMPLETE</span>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <div class="timeline-phase">PHASE 04</div>
+          <h3>PCB Design</h3>
+          <p>Schematic capture and PCB layout for the central electronics hub. 4-layer board designed in KiCad featuring the ESP32-C3, sensor interfaces, power management, and communication circuitry.</p>
+          <span class="timeline-status status-complete">COMPLETE</span>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <div class="timeline-phase">PHASE 05</div>
+          <h3>Prototype Manufacturing</h3>
+          <p>Fabrication of physical prototype using 3D printing, CNC machining, and layup techniques. PCB assembly and initial firmware flashing. Integration of all subsystems into the suit shell.</p>
+          <span class="timeline-status status-active">IN PROGRESS</span>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <div class="timeline-phase">PHASE 06</div>
+          <h3>Testing & Validation</h3>
+          <p>Structured test campaign covering pressure testing, sensor accuracy calibration, HUD readability testing, glove dexterity benchmarks, and full EVA simulation with a human subject.</p>
+          <span class="timeline-status status-pending">UPCOMING</span>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <div class="timeline-phase">PHASE 07</div>
+          <h3>Final Validation & Showcase</h3>
+          <p>Final integration testing, documentation completion, and preparation of the capstone showcase demonstration. Presentation to faculty, industry partners, and UTS stakeholders.</p>
+          <span class="timeline-status status-pending">UPCOMING</span>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section id="team">
+  <div class="container">
+    <div class="reveal" style="text-align:center;margin-bottom:60px">
+      <div class="section-label">// 09 — THE TEAM</div>
+      <h2 class="section-title">Meet the Engineers</h2>
+      <div class="section-line" style="margin:0 auto 0"></div>
+    </div>
+    <div class="team-grid reveal">
+      <div class="team-card">
+        <div class="team-avatar">👨‍🚀</div>
+        <div class="team-name">Adel Al Alghori</div>
+        <div class="team-role">MECHANICAL LEAD</div>
+        <div class="team-discipline">Mechanical Engineering</div>
+        <div class="team-bio">Responsible for the structural design of the suit body, pressure vessel analysis, and CAD modelling of all mechanical assemblies. Led the materials selection process and manufacturing coordination.</div>
+        <div class="team-tags">
+          <span class="team-tag">CAD Design</span>
+          <span class="team-tag">FEA Analysis</span>
+          <span class="team-tag">Manufacturing</span>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">👨‍💻</div>
+        <div class="team-name">Nhut Han Pham</div>
+        <div class="team-role">ELECTRONICS LEAD</div>
+        <div class="team-discipline">Electrical Engineering</div>
+        <div class="team-bio">Designed and implemented the custom PCB, embedded firmware on the ESP32-C3 platform, and integrated all sensor systems. Led the HUD display system and power management architecture.</div>
+        <div class="team-tags">
+          <span class="team-tag">PCB Design</span>
+          <span class="team-tag">Firmware</span>
+          <span class="team-tag">Sensors</span>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">👨‍🔬</div>
+        <div class="team-name">Samir Safarjlani</div>
+        <div class="team-role">SYSTEMS ENGINEER</div>
+        <div class="team-discipline">Mechatronics Engineering</div>
+        <div class="team-bio">Integrated all subsystems into a cohesive platform. Designed the exoskeleton glove control system, coordinated subsystem interfaces, and developed the overall systems architecture and test plan.</div>
+        <div class="team-tags">
+          <span class="team-tag">Systems Integration</span>
+          <span class="team-tag">Mechatronics</span>
+          <span class="team-tag">Testing</span>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">👩‍🔧</div>
+        <div class="team-name">Nora Sulaiman</div>
+        <div class="team-role">LIFE SUPPORT LEAD</div>
+        <div class="team-discipline">Biomedical Engineering</div>
+        <div class="team-bio">Led the design and validation of the PLSS subsystem. Conducted human factors analysis, defined biometric monitoring requirements, and ensured the system meets EVA survivability standards and ergonomic benchmarks.</div>
+        <div class="team-tags">
+          <span class="team-tag">PLSS Design</span>
+          <span class="team-tag">Biometrics</span>
+          <span class="team-tag">Human Factors</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">// 10 — PROJECT GALLERY</div>
+      <h2 class="section-title">Engineering Documentation</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="gallery-grid reveal">
+      <div class="gallery-item" onclick="openLightbox('CAD Full Assembly','Full suit 3D CAD render showing all major assemblies, sub-components, and the overall structural configuration generated in SolidWorks.')">
+        <div class="gallery-item-inner">
+          <div class="gallery-icon">🖥️</div>
+          <div class="gallery-label">CAD FULL ASSEMBLY</div>
+        </div>
+        <div class="gallery-overlay"><div class="gallery-overlay-icon">🔍</div></div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox('PCB Layout','4-layer custom PCB layout showing ESP32-C3, sensor footprints, power management ICs, and communication modules.')">
+        <div class="gallery-item-inner">
+          <div class="gallery-icon">📋</div>
+          <div class="gallery-label">PCB LAYOUT</div>
+        </div>
+        <div class="gallery-overlay"><div class="gallery-overlay-icon">🔍</div></div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox('Helmet HUD Prototype','Physical prototype of the helmet-mounted HUD assembly with OLED display integration and visor mounting hardware.')">
+        <div class="gallery-item-inner">
+          <div class="gallery-icon">🪖</div>
+          <div class="gallery-label">HELMET PROTOTYPE</div>
+        </div>
+        <div class="gallery-overlay"><div class="gallery-overlay-icon">🔍</div></div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox('Exoskeleton Glove','Prototype of the exoskeleton glove showing servo mounting points, flex sensor routing, and wrist PCB integration.')">
+        <div class="gallery-item-inner">
+          <div class="gallery-icon">🤖</div>
+          <div class="gallery-label">EXO GLOVE PROTO</div>
+        </div>
+        <div class="gallery-overlay"><div class="gallery-overlay-icon">🔍</div></div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox('Exploded View','Exploded CAD view showing the layer-by-layer suit construction including the pressure bladder, MLI stack, and outer shell.')">
+        <div class="gallery-item-inner">
+          <div class="gallery-icon">💥</div>
+          <div class="gallery-label">EXPLODED VIEW</div>
+        </div>
+        <div class="gallery-overlay"><div class="gallery-overlay-icon">🔍</div></div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox('Team Testing','The project team conducting EVA simulation testing with the physical prototype in the UTS engineering lab.')">
+        <div class="gallery-item-inner">
+          <div class="gallery-icon">👨‍👩‍👧‍👦</div>
+          <div class="gallery-label">TEAM TESTING</div>
+        </div>
+        <div class="gallery-overlay"><div class="gallery-overlay-icon">🔍</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="if(event.target===this)closeLightbox()">
+  <div class="lightbox-content">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <div class="lightbox-icon" id="lbIcon">🖥️</div>
+    <div class="lightbox-title" id="lbTitle">Title</div>
+    <div class="lightbox-desc" id="lbDesc">Description</div>
+  </div>
+</div>
+
+<!-- IMPACT -->
+<section id="impact">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">// 11 — IMPACT & APPLICATIONS</div>
+      <h2 class="section-title">Beyond the Mission</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="impact-grid reveal">
+      <div class="impact-card">
+        <div class="impact-icon">🌍</div>
+        <h3>Social Impact</h3>
+        <p>This project directly improves human safety in one of the most extreme environments ever encountered. By advancing EVA suit technology, we reduce risk for astronauts who push the boundary of human knowledge and exploration.</p>
+        <p style="margin-top:12px">The real-time health monitoring platform developed here has direct applications in emergency response, industrial safety, and remote healthcare.</p>
+      </div>
+      <div class="impact-card">
+        <div class="impact-icon">♻️</div>
+        <h3>Sustainability</h3>
+        <p>The PLSS design optimizes resource consumption throughout extended EVA missions. Smart power management, efficient CO₂ scrubbing, and precise oxygen regulation minimize waste and extend mission duration without increasing consumable mass.</p>
+        <p style="margin-top:12px">Lower mass means lower launch costs, directly reducing the carbon footprint of each mission.</p>
+      </div>
+      <div class="impact-card">
+        <div class="impact-icon">🔭</div>
+        <h3>Technology Transfer</h3>
+        <p>Technologies developed for this suit have broad applicability across high-risk industries and humanitarian sectors.</p>
+        <div class="transfer-tags">
+          <span class="transfer-tag">🔥 Firefighting</span>
+          <span class="transfer-tag">⛏️ Mining</span>
+          <span class="transfer-tag">☢️ Hazmat Response</span>
+          <span class="transfer-tag">🏥 Medical Wearables</span>
+          <span class="transfer-tag">🛡️ Defense</span>
+          <span class="transfer-tag">🏗️ Construction</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-logo">EVA SUIT // 2026</div>
+      <div class="footer-tagline">"Engineering the future of human exploration."</div>
+      <div class="footer-divider"></div>
+      <div class="footer-uni"><strong>University of Technology Sydney</strong><br>Faculty of Engineering & Information Technology<br>Engineering Capstone Project 2026</div>
+    </div>
+    <div class="footer-col">
+      <h4>THE TEAM</h4>
+      <ul class="footer-list">
+        <li><span>Adel Al Alghori</span></li>
+        <li><span>Nhut Han Pham</span></li>
+        <li><span>Samir Safarjlani</span></li>
+        <li><span>Nora Sulaiman</span></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>CONTACT</h4>
+      <ul class="footer-list">
+        <li><a href="mailto:samir.saf4@gmail.com">samir.saf4@gmail.com</a></li>
+        <li><a href="https://www.uts.edu.au">uts.edu.au</a></li>
+      </ul>
+      <div style="margin-top:24px">
+        <h4>NAVIGATE</h4>
+        <ul class="footer-list">
+          <li><a href="#about">About</a></li>
+          <li><a href="#overview">Suit Overview</a></li>
+          <li><a href="#team">Team</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 UTS Capstone Team — EVA SUIT DEVELOPMENT PROJECT</div>
+    <div class="footer-mission">Engineering the future of human exploration.</div>
+    <div class="social-links">
+      <a class="social-link" href="https://github.com" title="GitHub">⌨</a>
+      <a class="social-link" href="https://linkedin.com" title="LinkedIn">in</a>
+      <a class="social-link" href="mailto:samir.saf4@gmail.com" title="Email">✉</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ─── STARFIELD ───
+(function(){
+  const canvas = document.getElementById('starfield');
+  const ctx = canvas.getContext('2d');
+  let W, H, stars=[], nebulas=[];
+
+  function resize(){ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; }
+
+  function initStars(){
+    stars=[];
+    for(let i=0;i<220;i++){
+      stars.push({
+        x:Math.random()*W, y:Math.random()*H,
+        r:Math.random()*1.6+0.2,
+        a:Math.random(),
+        speed:Math.random()*0.3+0.05,
+        twinkle:Math.random()*Math.PI*2
+      });
+    }
+    nebulas=[];
+    for(let i=0;i<5;i++){
+      nebulas.push({
+        x:Math.random()*W, y:Math.random()*H,
+        r:Math.random()*200+100,
+        color:i%2===0?'rgba(0,40,120,':'rgba(0,80,80,',
+        a:Math.random()*0.06+0.02
+      });
+    }
+  }
+
+  function draw(t){
+    ctx.clearRect(0,0,W,H);
+    // Nebulas
+    nebulas.forEach(n=>{
+      const g=ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r);
+      g.addColorStop(0,n.color+n.a+')');
+      g.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=g;
+      ctx.beginPath(); ctx.arc(n.x,n.y,n.r,0,Math.PI*2); ctx.fill();
+    });
+    // Stars
+    stars.forEach(s=>{
+      const twinkle=0.5+0.5*Math.sin(t*0.001*s.speed*10+s.twinkle);
+      ctx.beginPath();
+      ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(200,230,255,${s.a*twinkle})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize',()=>{ resize(); initStars(); });
+  resize(); initStars(); requestAnimationFrame(draw);
+})();
+
+// ─── SCROLL REVEAL ───
+(function(){
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); } });
+  },{threshold:0.12});
+  els.forEach(el=>io.observe(el));
+})();
+
+// ─── SUBSYSTEM INFO TABS ───
+function showInfo(id){
+  document.querySelectorAll('.info-card').forEach(c=>c.classList.remove('active'));
+  document.querySelectorAll('.sub-tab').forEach(t=>t.classList.remove('active'));
+  const card = document.getElementById('info-'+id);
+  if(card) card.classList.add('active');
+  const tabs = document.querySelectorAll('.sub-tab');
+  const tabMap = {
+    'helmet':0,'plss-tab':1,'gloves-tab':2,'body-tab':3,
+    'chest-tab':4,'sensors-tab':5,'power-tab':6
+  };
+  if(tabMap[id]!==undefined && tabs[tabMap[id]]) tabs[tabMap[id]].classList.add('active');
+}
+
+// ─── HUD LIVE VALUES ───
+(function(){
+  function rand(base,range){ return Math.round(base + (Math.random()-0.5)*range); }
+  setInterval(()=>{
+    const hr=document.getElementById('hrVal');
+    const spo2=document.getElementById('spo2Val');
+    const o2=document.getElementById('o2Val');
+    const tmp=document.getElementById('tmpVal');
+    if(hr) hr.textContent=rand(72,8);
+    if(spo2) spo2.textContent=rand(97,3);
+    if(o2) o2.textContent=rand(93,4);
+    if(tmp) tmp.textContent=rand(21,3);
+  },3000);
+})();
+
+// ─── GALLERY LIGHTBOX ───
+const galleryIcons=['🖥️','📋','🪖','🤖','💥','👨‍👩‍👧‍👦'];
+let lastLbTitle='';
+function openLightbox(title, desc){
+  const idx = ['CAD Full Assembly','PCB Layout','Helmet HUD Prototype','Exoskeleton Glove','Exploded View','Team Testing'].indexOf(title);
+  document.getElementById('lbIcon').textContent = idx>=0 ? galleryIcons[idx] : '🔍';
+  document.getElementById('lbTitle').textContent = title;
+  document.getElementById('lbDesc').textContent = desc;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('open');
+}
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeLightbox(); });
+
+// ─── NAV CLOSE ON LINK ───
+document.querySelectorAll('.nav-links a').forEach(a=>{
+  a.addEventListener('click',()=>document.getElementById('navLinks').classList.remove('open'));
+});
+</script>
+</body>
+</html>
