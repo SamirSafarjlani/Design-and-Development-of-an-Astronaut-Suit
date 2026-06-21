@@ -246,9 +246,44 @@ section { position:relative; z-index:1; padding:100px 40px; }
 }
 .overview-container { display:flex; gap:40px; align-items:flex-start; }
 .suit-visual { position:relative; flex:0 0 auto; width:380px; }
+.view-toggle {
+  display:flex; gap:0; margin-bottom:16px;
+  border:1px solid var(--glass-border); border-radius:6px; overflow:hidden;
+  width:fit-content;
+}
+.view-btn {
+  font-family:'Share Tech Mono',monospace; font-size:0.65rem;
+  letter-spacing:3px; padding:8px 24px;
+  background:transparent; color:var(--silver);
+  border:none; cursor:pointer; transition:all 0.25s;
+}
+.view-btn.active {
+  background:rgba(0,245,255,0.1); color:var(--cyan);
+}
+.view-btn:not(.active):hover { color:var(--white); }
 .suit-diagram {
   width:100%; height:600px;
   position:relative;
+}
+.suit-view { position:relative; width:100%; height:100%; }
+.suit-photo {
+  width:100%; height:100%;
+  object-fit:contain;
+  filter: drop-shadow(0 0 30px rgba(0,245,255,0.15)) drop-shadow(0 0 60px rgba(0,102,255,0.1));
+}
+.plss-hotspot {
+  border-color:#4db8ff;
+  background:rgba(0,120,255,0.15);
+  animation: plssPulse 2s ease-in-out infinite;
+}
+.plss-hotspot:hover {
+  background:rgba(0,120,255,0.3);
+  box-shadow:0 0 20px rgba(0,120,255,0.6), 0 0 40px rgba(0,120,255,0.3);
+}
+.plss-hotspot::after { color:#4db8ff; }
+@keyframes plssPulse {
+  0%,100%{box-shadow:0 0 0 0 rgba(0,120,255,0.5)}
+  50%{box-shadow:0 0 0 12px rgba(0,120,255,0)}
 }
 .hotspot {
   position:absolute;
@@ -1088,36 +1123,25 @@ footer {
     </div>
     <div class="overview-container reveal">
       <div class="suit-visual">
+        <!-- Front/Back toggle -->
+        <div class="view-toggle">
+          <button class="view-btn active" id="btnFront" onclick="switchView('front')">FRONT</button>
+          <button class="view-btn" id="btnBack" onclick="switchView('back')">BACK</button>
+        </div>
         <div class="suit-diagram">
-          <!-- Simplified suit with hotspots -->
-          <svg viewBox="0 0 300 520" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-            <ellipse cx="150" cy="80" rx="68" ry="72" fill="rgba(0,30,60,0.9)" stroke="#00f5ff" stroke-width="1.5"/>
-            <ellipse cx="150" cy="82" rx="38" ry="34" fill="rgba(0,100,200,0.3)" stroke="#00aaff" stroke-width="1"/>
-            <ellipse cx="150" cy="82" rx="38" ry="34" fill="url(#visorGrad2)"/>
-            <rect x="110" y="148" width="80" height="12" rx="3" fill="rgba(0,60,120,0.6)" stroke="#006fff" stroke-width="1"/>
-            <path d="M72 160 L80 340 L220 340 L228 160 Q210 148 150 148 Q90 148 72 160Z" fill="rgba(0,20,50,0.9)" stroke="#00f5ff" stroke-width="1.2"/>
-            <rect x="110" y="175" width="80" height="60" rx="8" fill="rgba(0,245,255,0.06)" stroke="#00aaff" stroke-width="1"/>
-            <path d="M72 165 L40 180 L30 290 L58 295 L68 200 L80 185Z" fill="rgba(0,20,50,0.9)" stroke="#00f5ff" stroke-width="1"/>
-            <path d="M228 165 L260 180 L270 290 L242 295 L232 200 L220 185Z" fill="rgba(0,20,50,0.9)" stroke="#00f5ff" stroke-width="1"/>
-            <path d="M30 290 L22 310 L25 330 L50 335 L58 310 L58 295Z" fill="rgba(0,30,70,0.9)" stroke="#00f5ff" stroke-width="1"/>
-            <path d="M270 290 L278 310 L275 330 L250 335 L242 310 L242 295Z" fill="rgba(0,30,70,0.9)" stroke="#00f5ff" stroke-width="1"/>
-            <rect x="76" y="330" width="148" height="16" rx="4" fill="rgba(0,60,120,0.6)" stroke="#006fff" stroke-width="1"/>
-            <path d="M80 346 L76 460 L110 464 L120 380 L150 375 L180 380 L190 464 L224 460 L220 346Z" fill="rgba(0,20,50,0.9)" stroke="#00f5ff" stroke-width="1.2"/>
-            <path d="M76 460 L68 490 L88 500 L112 496 L110 464Z" fill="rgba(0,30,70,0.9)" stroke="#00f5ff" stroke-width="1"/>
-            <path d="M224 460 L232 490 L212 500 L188 496 L190 464Z" fill="rgba(0,30,70,0.9)" stroke="#00f5ff" stroke-width="1"/>
-            <defs>
-              <radialGradient id="visorGrad2" cx="40%" cy="35%">
-                <stop offset="0%" stop-color="rgba(0,180,255,0.4)"/>
-                <stop offset="100%" stop-color="rgba(0,20,80,0.2)"/>
-              </radialGradient>
-            </defs>
-          </svg>
-          <!-- Hotspots positioned over the SVG -->
-          <div class="hotspot" style="top:8%;left:50%;transform:translate(-50%,0)" data-label="Helmet HUD" data-target="helmet" onclick="showInfo('helmet')"><div class="hotspot-dot"></div></div>
-          <div class="hotspot left" style="top:28%;left:4%" data-label="PLSS" data-target="plss-tab" onclick="showInfo('plss-tab')"><div class="hotspot-dot"></div></div>
-          <div class="hotspot" style="top:40%;left:35%" data-label="Chest Interface" data-target="chest-tab" onclick="showInfo('chest-tab')"><div class="hotspot-dot"></div></div>
-          <div class="hotspot left" style="top:54%;left:4%" data-label="Exo Gloves" data-target="gloves-tab" onclick="showInfo('gloves-tab')"><div class="hotspot-dot"></div></div>
-          <div class="hotspot" style="top:70%;left:50%;transform:translate(-50%,0)" data-label="Suit Body" data-target="body-tab" onclick="showInfo('body-tab')"><div class="hotspot-dot"></div></div>
+          <!-- FRONT VIEW -->
+          <div id="suitFront" class="suit-view">
+            <img src="Astronaut Suit Photos/Full Suit Front Side.png" alt="Astronaut Suit Front View" class="suit-photo">
+            <div class="hotspot" style="top:6%;left:50%;transform:translate(-50%,0)" data-label="Helmet HUD" data-target="helmet" onclick="showInfo('helmet')"><div class="hotspot-dot"></div></div>
+            <div class="hotspot" style="top:38%;left:32%" data-label="Chest Interface" data-target="chest-tab" onclick="showInfo('chest-tab')"><div class="hotspot-dot"></div></div>
+            <div class="hotspot left" style="top:52%;left:2%" data-label="Exo Gloves" data-target="gloves-tab" onclick="showInfo('gloves-tab')"><div class="hotspot-dot"></div></div>
+            <div class="hotspot" style="top:68%;left:50%;transform:translate(-50%,0)" data-label="Suit Body" data-target="body-tab" onclick="showInfo('body-tab')"><div class="hotspot-dot"></div></div>
+          </div>
+          <!-- BACK VIEW -->
+          <div id="suitBack" class="suit-view" style="display:none">
+            <img src="Astronaut Suit Photos/Full suit Back side.png" alt="Astronaut Suit Back View — PLSS" class="suit-photo">
+            <div class="hotspot plss-hotspot" style="top:38%;left:50%;transform:translate(-50%,0)" data-label="PLSS" data-target="plss-tab" onclick="showInfo('plss-tab')"><div class="hotspot-dot"></div></div>
+          </div>
         </div>
       </div>
       <div class="suit-info-panel">
@@ -1663,6 +1687,22 @@ footer {
   },{threshold:0.12});
   els.forEach(el=>io.observe(el));
 })();
+
+// ─── SUIT VIEW TOGGLE ───
+function switchView(view){
+  const front = document.getElementById('suitFront');
+  const back  = document.getElementById('suitBack');
+  const btnF  = document.getElementById('btnFront');
+  const btnB  = document.getElementById('btnBack');
+  if(view === 'front'){
+    front.style.display = 'block'; back.style.display = 'none';
+    btnF.classList.add('active'); btnB.classList.remove('active');
+  } else {
+    front.style.display = 'none'; back.style.display = 'block';
+    btnF.classList.remove('active'); btnB.classList.add('active');
+    showInfo('plss-tab');
+  }
+}
 
 // ─── SUBSYSTEM INFO TABS ───
 function showInfo(id){
