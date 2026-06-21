@@ -324,11 +324,57 @@ section { position:relative; z-index:1; padding:100px 40px; }
   display:none;
   background:var(--glass);
   border:1px solid var(--glass-border);
-  border-radius:12px; padding:40px;
+  border-radius:12px; padding:30px;
   animation: fadeIn 0.4s ease;
-  height:100%;
+  overflow-y:auto; max-height:640px;
 }
 .info-card.active { display:block; }
+.info-photo-strip { margin-top:24px; padding-top:20px; border-top:1px solid rgba(0,245,255,0.08); }
+.photo-strip-label {
+  font-family:'Share Tech Mono',monospace; font-size:0.6rem;
+  color:var(--cyan); letter-spacing:3px; margin-bottom:14px;
+}
+.photo-strip-row {
+  display:flex; gap:10px; overflow-x:auto; padding-bottom:6px;
+}
+.photo-strip-row::-webkit-scrollbar { height:3px; }
+.photo-strip-row::-webkit-scrollbar-thumb { background:rgba(0,245,255,0.2); border-radius:2px; }
+.photo-thumb {
+  flex:0 0 auto; width:110px; cursor:pointer;
+  border:1px solid var(--glass-border); border-radius:6px;
+  overflow:hidden; transition:all 0.3s; background:rgba(0,0,0,0.3);
+}
+.photo-thumb:hover { border-color:var(--cyan); box-shadow:var(--glow-cyan); transform:scale(1.04); }
+.photo-thumb img { width:100%; height:80px; object-fit:cover; display:block; }
+.photo-thumb span {
+  display:block; font-family:'Share Tech Mono',monospace;
+  font-size:0.5rem; color:var(--silver); letter-spacing:1px;
+  padding:5px 6px; text-align:center;
+}
+/* Lightbox for images */
+.img-lightbox {
+  display:none; position:fixed; inset:0; z-index:9999;
+  background:rgba(0,0,0,0.94);
+  align-items:center; justify-content:center; flex-direction:column; gap:16px;
+}
+.img-lightbox.open { display:flex; animation:fadeIn 0.3s ease; }
+.img-lightbox img {
+  max-width:90vw; max-height:80vh;
+  object-fit:contain; border-radius:8px;
+  border:1px solid var(--glass-border);
+  box-shadow:0 0 60px rgba(0,245,255,0.1);
+}
+.img-lightbox-title {
+  font-family:'Orbitron',sans-serif; font-size:0.85rem;
+  color:var(--cyan); letter-spacing:2px;
+}
+.img-lightbox-close {
+  position:fixed; top:20px; right:24px;
+  font-size:1.8rem; color:var(--silver);
+  cursor:pointer; background:none; border:none; line-height:1;
+  transition:color 0.3s;
+}
+.img-lightbox-close:hover { color:var(--cyan); }
 .info-card-title {
   font-family:'Orbitron',sans-serif; font-size:1.4rem;
   color:var(--cyan); margin-bottom:8px;
@@ -1133,7 +1179,8 @@ footer {
     <div class="subsystem-tabs reveal">
       <button class="sub-tab active" onclick="showInfo('helmet')">Helmet HUD</button>
       <button class="sub-tab" onclick="showInfo('plss-tab')">PLSS</button>
-      <button class="sub-tab" onclick="showInfo('gloves-tab')">Exo Gloves</button>
+      <button class="sub-tab" onclick="showInfo('exo-tab')">Exoskeleton</button>
+      <button class="sub-tab" onclick="showInfo('gloves-tab')">Gloves</button>
       <button class="sub-tab" onclick="showInfo('body-tab')">Suit Body</button>
       <button class="sub-tab" onclick="showInfo('chest-tab')">Chest Interface</button>
     </div>
@@ -1151,8 +1198,9 @@ footer {
               <img src="Astronaut Suit Photos/Full Suit Front Side.png" alt="Astronaut Suit Front View" class="suit-photo">
               <div class="hotspot" style="top:7%;left:46%;transform:translate(-50%,0)" data-label="Helmet HUD" onclick="showInfo('helmet')"><div class="hotspot-dot"></div></div>
               <div class="hotspot" style="top:41%;left:36%" data-label="Chest Interface" onclick="showInfo('chest-tab')"><div class="hotspot-dot"></div></div>
-              <div class="hotspot left" style="top:59%;left:15%" data-label="Exo Gloves" onclick="showInfo('gloves-tab')"><div class="hotspot-dot"></div></div>
-              <div class="hotspot" style="top:73%;left:50%;transform:translate(-50%,0)" data-label="Suit Body" onclick="showInfo('body-tab')"><div class="hotspot-dot"></div></div>
+              <div class="hotspot left" style="top:52%;left:10%" data-label="Exoskeleton" onclick="showInfo('exo-tab')"><div class="hotspot-dot"></div></div>
+              <div class="hotspot" style="top:63%;right:8%;left:auto" data-label="Gloves" onclick="showInfo('gloves-tab')"><div class="hotspot-dot"></div></div>
+              <div class="hotspot" style="top:75%;left:50%;transform:translate(-50%,0)" data-label="Suit Body" onclick="showInfo('body-tab')"><div class="hotspot-dot"></div></div>
             </div>
           </div>
           <!-- BACK VIEW -->
@@ -1178,6 +1226,16 @@ footer {
             <li>Suit pressure warnings</li>
             <li>Battery level indicator</li>
           </ul>
+          <div class="info-photo-strip">
+            <div class="photo-strip-label">PROJECT PHOTOS</div>
+            <div class="photo-strip-row">
+              <div class="photo-thumb" onclick="openImgLightbox('Helmet/Cad View Front and Side.png','CAD — Front & Side View')"><img src="Helmet/Cad View Front and Side.png" alt="CAD Front & Side"><span>CAD VIEW</span></div>
+              <div class="photo-thumb" onclick="openImgLightbox('Helmet/Helmet IRL (1).png','Helmet — Real Build')"><img src="Helmet/Helmet IRL (1).png" alt="Helmet IRL"><span>REAL BUILD</span></div>
+              <div class="photo-thumb" onclick="openImgLightbox('Helmet/Isometric view of helmet PCB and HUD CAD.png','Isometric — PCB & HUD CAD')"><img src="Helmet/Isometric view of helmet PCB and HUD CAD.png" alt="Isometric PCB HUD"><span>PCB & HUD</span></div>
+              <div class="photo-thumb" onclick="openImgLightbox('Helmet/PCB 3D model.png','PCB 3D Model')"><img src="Helmet/PCB 3D model.png" alt="PCB 3D"><span>PCB 3D</span></div>
+              <div class="photo-thumb" onclick="openImgLightbox('Helmet/PCB Routing.png','PCB Routing Layout')"><img src="Helmet/PCB Routing.png" alt="PCB Routing"><span>ROUTING</span></div>
+            </div>
+          </div>
         </div>
         <div class="info-card" id="info-plss-tab">
           <div class="info-card-title">PLSS — Portable Life Support System</div>
@@ -1191,19 +1249,53 @@ footer {
             <li>High-density battery pack</li>
             <li>Emergency backup O₂ system</li>
           </ul>
+          <div class="info-photo-strip">
+            <div class="photo-strip-label">PROJECT PHOTOS</div>
+            <div class="photo-strip-row">
+              <div class="photo-thumb" onclick="openImgLightbox('PLSS/PLSS Back side.png','PLSS — Back Side')"><img src="PLSS/PLSS Back side.png" alt="PLSS Back"><span>BACK SIDE</span></div>
+              <div class="photo-thumb" onclick="openImgLightbox('PLSS/Chest Plate PLSS.png','PLSS — Chest Plate')"><img src="PLSS/Chest Plate PLSS.png" alt="Chest Plate"><span>CHEST PLATE</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="info-card" id="info-exo-tab">
+          <div class="info-card-title">Exoskeleton</div>
+          <div class="info-card-sub">Forearm Assist System</div>
+          <p>The forearm exoskeleton provides structural support and motion assistance to the astronaut's arms during extended EVA operations. Servo-driven linkages reduce the muscular load required to operate tools and maintain arm position against suit pressure resistance.</p>
+          <ul class="info-list">
+            <li>Servo-driven forearm linkages</li>
+            <li>Reduced arm fatigue during EVA</li>
+            <li>Rigid carbon-composite frame</li>
+            <li>Quick-release attachment system</li>
+            <li>Compatible with pressure gloves</li>
+            <li>Sensor-assisted motion tracking</li>
+          </ul>
+          <div class="info-photo-strip">
+            <div class="photo-strip-label">PROJECT PHOTOS</div>
+            <div class="photo-strip-row">
+              <div class="photo-thumb" onclick="openImgLightbox('Exoskeleton Photos/exoskeleton Cad.png','Exoskeleton — CAD Model')"><img src="Exoskeleton Photos/exoskeleton Cad.png" alt="Exoskeleton CAD"><span>CAD MODEL</span></div>
+              <div class="photo-thumb" onclick="openImgLightbox('Exoskeleton Photos/Exoskeleton Real testing.png','Exoskeleton — Real Testing')"><img src="Exoskeleton Photos/Exoskeleton Real testing.png" alt="Exoskeleton Testing"><span>REAL TESTING</span></div>
+            </div>
+          </div>
         </div>
         <div class="info-card" id="info-gloves-tab">
-          <div class="info-card-title">Exoskeleton Gloves</div>
-          <div class="info-card-sub">Assisted Dexterity System</div>
-          <p>Traditional EVA gloves reduce grip strength by up to 60%. Our exoskeleton glove system uses servo-assisted mechanisms and flex sensors to amplify grip strength, reduce fatigue, and maintain precision during critical tool operations.</p>
+          <div class="info-card-title">Gloves</div>
+          <div class="info-card-sub">Assisted Hand Dexterity System</div>
+          <p>Traditional EVA gloves reduce grip strength by up to 60%. Our glove system uses servo-assisted mechanisms and flex sensors to amplify grip strength, reduce fatigue, and maintain precision during critical tool operations in the hands.</p>
           <ul class="info-list">
             <li>Servo-assisted grip amplification</li>
-            <li>Flex sensor array (per finger)</li>
+            <li>Flex sensor array per finger</li>
             <li>Reduced hand fatigue by ~70%</li>
             <li>Tactile feedback preservation</li>
             <li>Tool-lock precision assist</li>
             <li>Thermal hand warming elements</li>
           </ul>
+          <div class="info-photo-strip">
+            <div class="photo-strip-label">PROJECT PHOTOS</div>
+            <div class="photo-strip-row">
+              <div class="photo-thumb" onclick="openImgLightbox('Gloves Photos/Gloves Cad (1).png','Gloves — CAD Model')"><img src="Gloves Photos/Gloves Cad (1).png" alt="Gloves CAD"><span>CAD MODEL</span></div>
+              <div class="photo-thumb" onclick="openImgLightbox('Gloves Photos/Gloves IRL (1).png','Gloves — Real Build')"><img src="Gloves Photos/Gloves IRL (1).png" alt="Gloves IRL"><span>REAL BUILD</span></div>
+            </div>
+          </div>
         </div>
         <div class="info-card" id="info-body-tab">
           <div class="info-card-title">Suit Body</div>
@@ -1217,6 +1309,13 @@ footer {
             <li>Modular assembly connectors</li>
             <li>Radiation shielding layer</li>
           </ul>
+          <div class="info-photo-strip">
+            <div class="photo-strip-label">PROJECT PHOTOS</div>
+            <div class="photo-strip-row">
+              <div class="photo-thumb" onclick="openImgLightbox('Boots/Cad Boots.png','Boots — CAD Model')"><img src="Boots/Cad Boots.png" alt="Boots CAD"><span>CAD MODEL</span></div>
+              <div class="photo-thumb" onclick="openImgLightbox('Boots/IRL Boots.png','Boots — Real Build')"><img src="Boots/IRL Boots.png" alt="Boots IRL"><span>REAL BUILD</span></div>
+            </div>
+          </div>
         </div>
         <div class="info-card" id="info-chest-tab">
           <div class="info-card-title">Chest Control Interface</div>
@@ -1230,6 +1329,12 @@ footer {
             <li>Communication system controls</li>
             <li>Battery status indicators</li>
           </ul>
+          <div class="info-photo-strip">
+            <div class="photo-strip-label">PROJECT PHOTOS</div>
+            <div class="photo-strip-row">
+              <div class="photo-thumb" onclick="openImgLightbox('PLSS/Chest Plate PLSS.png','Chest Control Interface')"><img src="PLSS/Chest Plate PLSS.png" alt="Chest Plate"><span>CHEST PLATE</span></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1744,7 +1849,7 @@ function showInfo(id){
   if(card) card.classList.add('active');
   const tabs = document.querySelectorAll('.sub-tab');
   const tabMap = {
-    'helmet':0,'plss-tab':1,'gloves-tab':2,'body-tab':3,'chest-tab':4
+    'helmet':0,'plss-tab':1,'exo-tab':2,'gloves-tab':3,'body-tab':4,'chest-tab':5
   };
   if(tabMap[id]!==undefined && tabs[tabMap[id]]) tabs[tabMap[id]].classList.add('active');
 }
@@ -1769,6 +1874,25 @@ function showInfo(id){
 document.querySelectorAll('.nav-links a').forEach(a=>{
   a.addEventListener('click',()=>document.getElementById('navLinks').classList.remove('open'));
 });
+
+// ─── IMAGE LIGHTBOX ───
+function openImgLightbox(src, title){
+  document.getElementById('imgLbImg').src = src;
+  document.getElementById('imgLbTitle').textContent = title;
+  document.getElementById('imgLightbox').classList.add('open');
+}
+function closeImgLightbox(){
+  document.getElementById('imgLightbox').classList.remove('open');
+  document.getElementById('imgLbImg').src = '';
+}
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeImgLightbox(); });
 </script>
+
+<!-- IMAGE LIGHTBOX -->
+<div class="img-lightbox" id="imgLightbox" onclick="if(event.target===this)closeImgLightbox()">
+  <button class="img-lightbox-close" onclick="closeImgLightbox()">✕</button>
+  <img id="imgLbImg" src="" alt="">
+  <div class="img-lightbox-title" id="imgLbTitle"></div>
+</div>
 </body>
 </html>
