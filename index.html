@@ -245,11 +245,11 @@ section { position:relative; z-index:1; padding:100px 40px; }
   background:linear-gradient(180deg, transparent, rgba(0,20,50,0.4), transparent);
 }
 .overview-container { display:flex; gap:40px; align-items:flex-start; }
-.suit-visual { position:relative; flex:0 0 auto; width:380px; }
+.suit-visual { position:relative; flex:0 0 auto; width:420px; display:flex; flex-direction:column; align-items:center; }
 .view-toggle {
   display:flex; gap:0; margin-bottom:16px;
   border:1px solid var(--glass-border); border-radius:6px; overflow:hidden;
-  width:fit-content;
+  width:fit-content; align-self:flex-start;
 }
 .view-btn {
   font-family:'Share Tech Mono',monospace; font-size:0.65rem;
@@ -257,19 +257,16 @@ section { position:relative; z-index:1; padding:100px 40px; }
   background:transparent; color:var(--silver);
   border:none; cursor:pointer; transition:all 0.25s;
 }
-.view-btn.active {
-  background:rgba(0,245,255,0.1); color:var(--cyan);
-}
+.view-btn.active { background:rgba(0,245,255,0.1); color:var(--cyan); }
 .view-btn:not(.active):hover { color:var(--white); }
-.suit-diagram {
-  width:100%; height:600px;
-  position:relative;
+.suit-diagram { width:100%; display:flex; justify-content:center; }
+.suit-view { display:flex; justify-content:center; }
+.suit-img-wrap {
+  position:relative; display:inline-block; line-height:0;
 }
-.suit-view { position:relative; width:100%; height:100%; }
 .suit-photo {
-  width:100%; height:100%;
-  object-fit:contain;
-  filter: drop-shadow(0 0 30px rgba(0,245,255,0.15)) drop-shadow(0 0 60px rgba(0,102,255,0.1));
+  display:block; width:auto; max-height:580px; max-width:100%;
+  filter: drop-shadow(0 0 28px rgba(0,245,255,0.2)) drop-shadow(0 0 60px rgba(0,102,255,0.12));
 }
 .plss-hotspot {
   border-color:#4db8ff;
@@ -280,10 +277,11 @@ section { position:relative; z-index:1; padding:100px 40px; }
   background:rgba(0,120,255,0.3);
   box-shadow:0 0 20px rgba(0,120,255,0.6), 0 0 40px rgba(0,120,255,0.3);
 }
-.plss-hotspot::after { color:#4db8ff; }
+.plss-hotspot .hotspot-dot { background:#4db8ff; }
+.plss-hotspot::after { color:#4db8ff !important; }
 @keyframes plssPulse {
   0%,100%{box-shadow:0 0 0 0 rgba(0,120,255,0.5)}
-  50%{box-shadow:0 0 0 12px rgba(0,120,255,0)}
+  50%{box-shadow:0 0 0 14px rgba(0,120,255,0)}
 }
 .hotspot {
   position:absolute;
@@ -1131,16 +1129,20 @@ footer {
         <div class="suit-diagram">
           <!-- FRONT VIEW -->
           <div id="suitFront" class="suit-view">
-            <img src="Astronaut Suit Photos/Full Suit Front Side.png" alt="Astronaut Suit Front View" class="suit-photo">
-            <div class="hotspot" style="top:6%;left:50%;transform:translate(-50%,0)" data-label="Helmet HUD" data-target="helmet" onclick="showInfo('helmet')"><div class="hotspot-dot"></div></div>
-            <div class="hotspot" style="top:38%;left:32%" data-label="Chest Interface" data-target="chest-tab" onclick="showInfo('chest-tab')"><div class="hotspot-dot"></div></div>
-            <div class="hotspot left" style="top:52%;left:2%" data-label="Exo Gloves" data-target="gloves-tab" onclick="showInfo('gloves-tab')"><div class="hotspot-dot"></div></div>
-            <div class="hotspot" style="top:68%;left:50%;transform:translate(-50%,0)" data-label="Suit Body" data-target="body-tab" onclick="showInfo('body-tab')"><div class="hotspot-dot"></div></div>
+            <div class="suit-img-wrap">
+              <img src="Astronaut Suit Photos/Full Suit Front Side.png" alt="Astronaut Suit Front View" class="suit-photo">
+              <div class="hotspot" style="top:7%;left:46%;transform:translate(-50%,0)" data-label="Helmet HUD" onclick="showInfo('helmet')"><div class="hotspot-dot"></div></div>
+              <div class="hotspot" style="top:41%;left:36%" data-label="Chest Interface" onclick="showInfo('chest-tab')"><div class="hotspot-dot"></div></div>
+              <div class="hotspot left" style="top:59%;left:15%" data-label="Exo Gloves" onclick="showInfo('gloves-tab')"><div class="hotspot-dot"></div></div>
+              <div class="hotspot" style="top:73%;left:50%;transform:translate(-50%,0)" data-label="Suit Body" onclick="showInfo('body-tab')"><div class="hotspot-dot"></div></div>
+            </div>
           </div>
           <!-- BACK VIEW -->
           <div id="suitBack" class="suit-view" style="display:none">
-            <img src="Astronaut Suit Photos/Full suit Back side.png" alt="Astronaut Suit Back View — PLSS" class="suit-photo">
-            <div class="hotspot plss-hotspot" style="top:38%;left:50%;transform:translate(-50%,0)" data-label="PLSS" data-target="plss-tab" onclick="showInfo('plss-tab')"><div class="hotspot-dot"></div></div>
+            <div class="suit-img-wrap">
+              <img src="Astronaut Suit Photos/Full suit Back side.png" alt="Astronaut Suit Back View — PLSS" class="suit-photo">
+              <div class="hotspot plss-hotspot" style="top:37%;left:50%;transform:translate(-50%,0)" data-label="PLSS" onclick="showInfo('plss-tab')"><div class="hotspot-dot"></div></div>
+            </div>
           </div>
         </div>
       </div>
