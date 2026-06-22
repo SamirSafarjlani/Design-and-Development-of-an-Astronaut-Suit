@@ -1573,39 +1573,39 @@ footer {
 // ─── SUBSYSTEM DATA ───
 const suitData = {
   'helmet': {
-    name:'Helmet HUD', sub:'Head-Up Display System',
-    desc:'The helmet-integrated Head-Up Display provides astronauts with real-time critical data overlaid on their field of view, eliminating the need to look away from the task at hand. The transparent OLED display projects telemetry directly onto the visor surface.',
-    bullets:['Heart rate monitoring (BPM)','SpO₂ blood oxygen saturation','Internal and external temperature','Remaining oxygen levels','CO₂ concentration alerts','Suit pressure warnings','Battery level indicator'],
+    name:'Helmet HUD', sub:'Bio-Health & Environmental Monitoring',
+    desc:'A smart astronaut EVA-inspired helmet system with real-time biomedical and environmental monitoring. An integrated monocular OLED HUD is mounted inside the visor to deliver critical data without distraction, improving situational awareness during EVA operations. The helmet shell is 3D printed in PLA+ with a transparent PETG visor, modelled in SolidWorks using Orion/xEVA inspired dimensions.',
+    bullets:['ESP32-C3 Microcontroller — central processing unit','MAX30102 Heart Rate & SpO₂ Sensor — real-time pulse monitoring','BME688 Environmental Sensor — temperature, humidity & air quality','OLED HUD Display (SH1106) — monocular visor projection','Custom PCB designed in Altium Designer with I²C bus','Firmware written in C++ using Arduino framework','3D printed PLA+ shell with transparent PETG visor'],
     photos:[
       {src:'Helmet/Cad View Front and Side.png',label:'CAD VIEW'},
       {src:'Helmet/Helmet IRL (1).png',label:'REAL BUILD'},
-      {src:'Helmet/Isometric view of helmet PCB and HUD CAD.png',label:'PCB & HUD'},
-      {src:'Helmet/PCB 3D model.png',label:'PCB 3D'},
-      {src:'Helmet/PCB Routing.png',label:'ROUTING'}
+      {src:'Helmet/Isometric view of helmet PCB and HUD CAD.png',label:'PCB & HUD CAD'},
+      {src:'Helmet/PCB 3D model.png',label:'PCB 3D MODEL'},
+      {src:'Helmet/PCB Routing.png',label:'PCB ROUTING'}
     ]
   },
   'plss-tab': {
     name:'PLSS', sub:'Portable Life Support System',
-    desc:'The PLSS is the backbone of astronaut survivability. This integrated backpack system manages all life-critical functions including oxygen supply, CO₂ scrubbing, temperature control, and emergency reserves throughout the entire EVA duration.',
-    bullets:['Primary oxygen supply tanks','CO₂ removal via LiOH scrubbers','Active thermal regulation loops','Forced air circulation fans','High-density battery pack','Emergency backup O₂ system'],
+    desc:'A NASA-inspired backpack unit simulating oxygen and airflow systems for a realistic EVA suit experience. Built with a lightweight foam-core structure and adjustable wearable straps, the PLSS integrates directly with the suit body through tubing and cable routing to achieve a functional, fully wearable prototype.',
+    bullets:['NASA-inspired backpack design','Simulated oxygen and airflow system','Lightweight foam-core structure','Adjustable wearable harness straps','Tubing and cable routing integration','Backpack rigidity with strap and tubing placement','Functional wearable PLSS-inspired prototype'],
     photos:[
       {src:'PLSS/PLSS Back side.png',label:'BACK SIDE'},
       {src:'PLSS/Chest Plate PLSS.png',label:'CHEST PLATE'}
     ]
   },
   'exo-tab': {
-    name:'Exoskeleton', sub:'Forearm Assist System',
-    desc:'The forearm exoskeleton provides structural support and motion assistance to the astronaut\'s arms during extended EVA operations. Servo-driven linkages reduce the muscular load required to operate tools and maintain arm position against suit pressure resistance.',
-    bullets:['Servo-driven forearm linkages','Reduced arm fatigue during EVA','Rigid carbon-composite frame','Quick-release attachment system','Compatible with pressure gloves','Sensor-assisted motion tracking'],
+    name:'Exoskeleton', sub:'Joint Assist & Exo-Frame System',
+    desc:'Designed to solve the high torque resistance that causes arm fatigue during EVA operations. The exo-frame features an assemblable bearing inspired by NASA\'s xEMU joint with a plug-in attachment system, and a 2-part lock-in section that replaces the traditional joint while preventing fine dust ingress in space environments.',
+    bullets:['Addresses arm/shoulder fatigue from torque resistance in EVA suits','Assemblable bearing inspired by NASA xEMU joint — plug-in attachment','2-part lock-in section prevents fine lunar/Martian dust ingress','Shoulder/elbow assistance using passive springs and linkages','Sensorized biomechanical monitoring via IMUs and load cells','Measures joint motion, force and torque for fatigue evaluation','Hip-knee mobility assist for walking, stepping and kneeling tasks'],
     photos:[
       {src:'Exoskeleton Photos/exoskeleton Cad.png',label:'CAD MODEL'},
       {src:'Exoskeleton Photos/Exoskeleton Real testing.png',label:'REAL TESTING'}
     ]
   },
   'gloves-tab': {
-    name:'Gloves', sub:'Assisted Hand Dexterity System',
-    desc:'Traditional EVA gloves reduce grip strength by up to 60%. Our glove system uses servo-assisted mechanisms and flex sensors to amplify grip strength, reduce fatigue, and maintain precision during critical tool operations.',
-    bullets:['Servo-assisted grip amplification','Flex sensor array per finger','Reduced hand fatigue by ~70%','Tactile feedback preservation','Tool-lock precision assist','Thermal hand warming elements'],
+    name:'Gloves', sub:'Multi-Layer Pressure Glove System',
+    desc:'A 6-layer construction designed to simulate EVA glove functionality. Each layer is selected to represent a specific function — comfort, pressure restraint, insulation, protection, grip, and wrist support. A final wrist cuff completes integration by visually and structurally connecting the glove to the suit sleeve.',
+    bullets:['Layer 1 — Inner Base Glove: fit, comfort & base structure (fabric work glove)','Layer 2 — Stretch / Pressure Simulation: light tension for pressure-restraint (stretch fabric)','Layer 3 — Tightening Straps: fixes layers in place, improves restraint (Velcro strips)','Layer 4 — Thermal Insulation: light barrier reducing heat transfer (foam sheet)','Layer 5 — Outer Protective Layer: external shape, surface protection (synthetic leather)','Layer 6 — Roughened Palm Grip: improves grip and reduces slipping (grip material)','Wrist Cuff: integration, closure & connection to suit sleeve (foam, leather & Velcro)'],
     photos:[
       {src:'Gloves Photos/Gloves Cad (1).png',label:'CAD MODEL'},
       {src:'Gloves Photos/Gloves IRL (1).png',label:'REAL BUILD'}
@@ -1613,17 +1613,17 @@ const suitData = {
   },
   'body-tab': {
     name:'Boots', sub:'Footwear & Lower Extremity',
-    desc:'The primary suit body serves as the pressure barrier between the astronaut and the vacuum of space. Multiple layers of advanced materials work together to maintain internal pressure, thermal control, and protection from micrometeorite impacts.',
-    bullets:['Multi-layer pressure retention','Thermal micro-meteorite shield','Lightweight titanium structural joints','Embedded cable routing channels','Modular assembly connectors','Radiation shielding layer'],
+    desc:'Astronaut boot system designed for EVA use, providing lower extremity protection and mobility support during surface operations.',
+    bullets:['Designed for EVA surface operations','Provides lower extremity protection','Supports mobility during lunar/planetary tasks'],
     photos:[
       {src:'Boots/Cad Boots.png',label:'CAD MODEL'},
       {src:'Boots/IRL Boots.png',label:'REAL BUILD'}
     ]
   },
   'chest-tab': {
-    name:'Chest Control Interface', sub:'Primary Mission Control Panel',
-    desc:'The chest-mounted interface provides the astronaut with direct tactile access to all critical suit systems without requiring fine dexterity. Large, glove-compatible controls and a bright OLED display allow rapid system monitoring and adjustment.',
-    bullets:['Central OLED status display','Oxygen flow rate control','Temperature setpoint adjustment','Emergency system toggles','Communication system controls','Battery status indicators'],
+    name:'Chest Control Interface', sub:'NASA-Inspired Front Control System',
+    desc:'A chest-mounted astronaut interface featuring a NASA-inspired front control box with simulated airflow tubing. Engineered for lightweight, compact wearable integration, the unit achieves a realistic astronaut suit appearance with full tubing and cable routing throughout the structure.',
+    bullets:['Chest-mounted NASA-inspired front control box','Simulated airflow tubing system','Integrated wearable structure for full suit assembly','Lightweight and compact engineering focus','Tubing and cable routing throughout','Wearable mounting system for suit integration','Outcome: functional front subsystem prototype with improved realism'],
     photos:[
       {src:'PLSS/Chest Plate PLSS.png',label:'CHEST PLATE'}
     ]
