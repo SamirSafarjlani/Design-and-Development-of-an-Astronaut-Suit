@@ -585,72 +585,6 @@ section { position:relative; z-index:1; padding:100px 40px; }
 .spec-card-title { font-size:0.7rem; color:var(--cyan); letter-spacing:2px; font-family:'Share Tech Mono',monospace; margin-bottom:4px; }
 .spec-card-val { font-size:0.85rem; color:var(--white); font-weight:500; }
 
-/* ─── GLOVES ─── */
-#gloves { background:linear-gradient(180deg, transparent, rgba(0,20,50,0.3), transparent); }
-.gloves-layout { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
-.glove-visual {
-  position:relative; display:flex; align-items:center; justify-content:center;
-}
-.glove-svg-wrap {
-  position:relative;
-  width:300px; height:350px;
-  display:flex; align-items:center; justify-content:center;
-}
-.wireframe-glow {
-  filter: drop-shadow(0 0 20px rgba(0,245,255,0.6));
-  animation: floatSuit 4s ease-in-out infinite;
-}
-.glove-features { display:flex; flex-direction:column; gap:16px; }
-.feature-row {
-  display:flex; align-items:center; gap:20px;
-  padding:16px 20px;
-  background:var(--glass);
-  border:1px solid var(--glass-border);
-  border-radius:8px;
-  transition:all 0.3s;
-}
-.feature-row:hover {
-  border-color:var(--cyan);
-  box-shadow:var(--glow-cyan);
-  transform:translateX(6px);
-}
-.feature-num {
-  font-family:'Orbitron',sans-serif; font-size:1.4rem;
-  font-weight:900; color:rgba(0,245,255,0.25);
-  min-width:40px;
-}
-.feature-text h4 { font-size:0.95rem; color:var(--white); margin-bottom:4px; }
-.feature-text p { font-size:0.8rem; color:var(--silver); line-height:1.6; }
-
-/* ─── MATERIALS ─── */
-#materials { background:linear-gradient(180deg, transparent, rgba(0,10,30,0.5), transparent); }
-.materials-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:20px; }
-.material-card {
-  background:var(--glass);
-  border:1px solid var(--glass-border);
-  border-radius:12px; padding:30px 24px;
-  transition:all 0.4s;
-  position:relative; overflow:hidden;
-}
-.material-card::before {
-  content:'';
-  position:absolute; top:0; left:0; right:0; height:2px;
-  background:linear-gradient(90deg, var(--blue), var(--cyan));
-  opacity:0; transition:opacity 0.3s;
-}
-.material-card:hover::before { opacity:1; }
-.material-card:hover {
-  border-color:rgba(0,245,255,0.3);
-  box-shadow:var(--glow-cyan);
-  transform:translateY(-4px);
-}
-.material-icon { font-size:2.4rem; margin-bottom:16px; }
-.material-card h3 {
-  font-family:'Orbitron',sans-serif; font-size:0.9rem;
-  color:var(--cyan); margin-bottom:10px; letter-spacing:1px;
-}
-.material-card p { font-size:0.85rem; color:var(--silver); line-height:1.7; }
-
 /* ─── ELECTRONICS ─── */
 #electronics { background:linear-gradient(180deg, transparent, rgba(0,20,50,0.4), transparent); }
 .electronics-layout { display:grid; grid-template-columns:1fr 1.2fr; gap:60px; align-items:center; }
@@ -1031,12 +965,11 @@ footer {
     border-bottom:1px solid var(--glass-border);
   }
   section { padding:70px 20px; }
-  .about-grid, .hud-layout, .plss-layout, .gloves-layout, .electronics-layout { grid-template-columns:1fr; }
+  .about-grid, .hud-layout, .plss-layout, .electronics-layout { grid-template-columns:1fr; }
   .overview-container { flex-direction:column; }
   .suit-visual { width:100%; }
   .team-grid { grid-template-columns:repeat(2,1fr); }
   .gallery-grid { grid-template-columns:repeat(2,1fr); }
-  .materials-grid { grid-template-columns:1fr 1fr; }
   .impact-grid { grid-template-columns:1fr; }
   .footer-grid { grid-template-columns:1fr; gap:30px; }
   .timeline-item, .timeline-item:nth-child(odd) { flex-direction:column; align-items:flex-start; }
@@ -1049,7 +982,6 @@ footer {
 @media(max-width:600px){
   .team-grid { grid-template-columns:1fr; }
   .gallery-grid { grid-template-columns:1fr; }
-  .materials-grid { grid-template-columns:1fr; }
   .goals-grid { grid-template-columns:1fr; }
   .spec-grid { grid-template-columns:1fr; }
   .elec-specs { grid-template-columns:1fr; }
@@ -1458,144 +1390,11 @@ footer {
   </div>
 </section>
 
-<!-- GLOVES -->
-<section id="gloves">
-  <div class="container">
-    <div class="reveal">
-      <div class="section-label">// 04 — EXOSKELETON GLOVES</div>
-      <h2 class="section-title">Assisted Dexterity System</h2>
-      <div class="section-line"></div>
-    </div>
-    <div class="gloves-layout reveal">
-      <div class="glove-visual">
-        <div class="glove-svg-wrap">
-          <svg class="wireframe-glow" viewBox="0 0 200 280" fill="none" xmlns="http://www.w3.org/2000/svg" width="260" height="320">
-            <!-- Palm -->
-            <rect x="50" y="120" width="100" height="100" rx="14" fill="rgba(0,30,70,0.6)" stroke="#00f5ff" stroke-width="1.2"/>
-            <!-- Thumb -->
-            <path d="M50 140 L20 115 L18 100 L30 92 L44 105 L50 125Z" fill="rgba(0,20,60,0.6)" stroke="#00f5ff" stroke-width="1"/>
-            <!-- Index -->
-            <rect x="112" y="60" width="22" height="68" rx="8" fill="rgba(0,20,60,0.6)" stroke="#00f5ff" stroke-width="1"/>
-            <!-- Middle -->
-            <rect x="84" y="50" width="22" height="74" rx="8" fill="rgba(0,20,60,0.6)" stroke="#00f5ff" stroke-width="1"/>
-            <!-- Ring -->
-            <rect x="56" y="56" width="22" height="70" rx="8" fill="rgba(0,20,60,0.6)" stroke="#00f5ff" stroke-width="1"/>
-            <!-- Pinky -->
-            <rect x="140" y="74" width="18" height="56" rx="8" fill="rgba(0,20,60,0.6)" stroke="#00f5ff" stroke-width="1"/>
-            <!-- Knuckle lines -->
-            <line x1="50" y1="120" x2="150" y2="120" stroke="rgba(0,245,255,0.2)" stroke-width="0.7"/>
-            <!-- Wrist -->
-            <rect x="55" y="218" width="90" height="44" rx="10" fill="rgba(0,30,70,0.6)" stroke="#00aaff" stroke-width="1"/>
-            <!-- PCB on wrist -->
-            <rect x="66" y="228" width="68" height="24" rx="4" fill="rgba(0,245,255,0.05)" stroke="rgba(0,245,255,0.3)" stroke-width="0.6"/>
-            <line x1="75" y1="234" x2="125" y2="234" stroke="rgba(0,245,255,0.3)" stroke-width="0.5"/>
-            <line x1="75" y1="240" x2="125" y2="240" stroke="rgba(0,245,255,0.2)" stroke-width="0.5"/>
-            <circle cx="85" cy="237" r="3" fill="none" stroke="rgba(0,245,255,0.5)" stroke-width="0.8"/>
-            <circle cx="100" cy="237" r="3" fill="none" stroke="rgba(0,245,255,0.5)" stroke-width="0.8"/>
-            <circle cx="115" cy="237" r="3" fill="none" stroke="rgba(0,245,255,0.5)" stroke-width="0.8"/>
-            <!-- Servo indicators on fingers -->
-            <circle cx="123" cy="85" r="4" fill="rgba(0,245,255,0.1)" stroke="#00f5ff" stroke-width="0.8"/>
-            <circle cx="95" cy="76" r="4" fill="rgba(0,245,255,0.1)" stroke="#00f5ff" stroke-width="0.8"/>
-            <circle cx="67" cy="80" r="4" fill="rgba(0,245,255,0.1)" stroke="#00f5ff" stroke-width="0.8"/>
-            <circle cx="149" cy="95" r="3" fill="rgba(0,245,255,0.1)" stroke="#00f5ff" stroke-width="0.8"/>
-            <!-- Tech overlay lines -->
-            <line x1="50" y1="165" x2="150" y2="165" stroke="rgba(0,245,255,0.1)" stroke-width="0.5" stroke-dasharray="3 3"/>
-            <line x1="100" y1="120" x2="100" y2="218" stroke="rgba(0,245,255,0.1)" stroke-width="0.5" stroke-dasharray="3 3"/>
-          </svg>
-        </div>
-      </div>
-      <div class="glove-features">
-        <div class="feature-row">
-          <div class="feature-num">01</div>
-          <div class="feature-text">
-            <h4>Assisted Grip Strength</h4>
-            <p>Servo motors amplify grip force by up to 40%, countering the stiffness of pressurized gloves in vacuum environments.</p>
-          </div>
-        </div>
-        <div class="feature-row">
-          <div class="feature-num">02</div>
-          <div class="feature-text">
-            <h4>Reduced Hand Fatigue</h4>
-            <p>Exoskeleton frame offloads repetitive strain during extended tool operations, reducing fatigue by approximately 70%.</p>
-          </div>
-        </div>
-        <div class="feature-row">
-          <div class="feature-num">03</div>
-          <div class="feature-text">
-            <h4>Enhanced Dexterity</h4>
-            <p>Flex sensor array on each finger maps hand motion precisely, preserving natural movement while adding power assistance.</p>
-          </div>
-        </div>
-        <div class="feature-row">
-          <div class="feature-num">04</div>
-          <div class="feature-text">
-            <h4>Precision Tool Usage</h4>
-            <p>Sensor-assisted movement stabilization reduces tremor during fine manipulation tasks such as bolt fastening or connector mating.</p>
-          </div>
-        </div>
-        <div class="feature-row">
-          <div class="feature-num">05</div>
-          <div class="feature-text">
-            <h4>Thermal Hand Warming</h4>
-            <p>Embedded heating elements maintain optimal hand temperature in the extreme cold of shadow regions during EVA.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- MATERIALS -->
-<section id="materials">
-  <div class="container">
-    <div class="reveal">
-      <div class="section-label">// 05 — MATERIALS & ENGINEERING</div>
-      <h2 class="section-title">Suit Construction</h2>
-      <div class="section-line"></div>
-      <p style="color:var(--silver);max-width:650px;line-height:1.9;margin-bottom:40px;font-weight:300;">
-        The suit body integrates multiple material layers, each serving a critical function. The design prioritizes minimizing mass while maximizing protection, thermal performance, and structural integrity.
-      </p>
-    </div>
-    <div class="materials-grid reveal">
-      <div class="material-card">
-        <div class="material-icon">🛡️</div>
-        <h3>Outer Protective Shell</h3>
-        <p>High-durability Ortho-Fabric outer layer resistant to abrasion, micrometeorite impact, and UV radiation. Provides the first line of defense against the space environment.</p>
-      </div>
-      <div class="material-card">
-        <div class="material-icon">🌡️</div>
-        <h3>Thermal Insulation</h3>
-        <p>Multi-layer insulation (MLI) with aluminized Mylar and Dacron spacer layers. Maintains internal temperature across the extreme range of −160°C to +120°C.</p>
-      </div>
-      <div class="material-card">
-        <div class="material-icon">💨</div>
-        <h3>Pressure Retention</h3>
-        <p>Neoprene-coated nylon bladder layer maintains the pressurized atmosphere essential for astronaut survival, engineered for zero-leak performance under cyclic loading.</p>
-      </div>
-      <div class="material-card">
-        <div class="material-icon">🔩</div>
-        <h3>Structural Supports</h3>
-        <p>Lightweight titanium alloy bearings and carbon fiber reinforced polymer joints provide the structural rigidity required at pressure joints while minimizing added mass.</p>
-      </div>
-      <div class="material-card">
-        <div class="material-icon">⚡</div>
-        <h3>Embedded Electronics</h3>
-        <p>Flexible PCB traces routed through dedicated channels within suit layers. All electronics are radiation-hardened and sealed against outgassing in vacuum.</p>
-      </div>
-      <div class="material-card">
-        <div class="material-icon">⚖️</div>
-        <h3>Weight Optimization</h3>
-        <p>Every component selected through mass-budget analysis. Target suit weight under 40 kg dry mass (excluding PLSS) through strategic use of advanced composites and additive manufacturing.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ELECTRONICS -->
 <section id="electronics">
   <div class="container">
     <div class="reveal">
-      <div class="section-label">// 06 — ELECTRONICS & EMBEDDED SYSTEMS</div>
+      <div class="section-label">// 04 — ELECTRONICS & EMBEDDED SYSTEMS</div>
       <h2 class="section-title">System Architecture</h2>
       <div class="section-line"></div>
     </div>
@@ -1647,7 +1446,7 @@ footer {
 <section id="team">
   <div class="container">
     <div class="reveal" style="text-align:center;margin-bottom:60px">
-      <div class="section-label">// 07 — THE TEAM</div>
+      <div class="section-label">// 05 — THE TEAM</div>
       <h2 class="section-title">Meet the Engineers</h2>
       <div class="section-line" style="margin:0 auto 0"></div>
     </div>
@@ -1720,7 +1519,7 @@ footer {
 <section id="impact">
   <div class="container">
     <div class="reveal">
-      <div class="section-label">// 08 — IMPACT & APPLICATIONS</div>
+      <div class="section-label">// 06 — IMPACT & APPLICATIONS</div>
       <h2 class="section-title">Beyond the Mission</h2>
       <div class="section-line"></div>
     </div>
