@@ -410,67 +410,105 @@ section { position:relative; z-index:1; padding:100px 40px; }
 #hud { background:linear-gradient(180deg, transparent, rgba(0,10,40,0.5), transparent); }
 .hud-layout { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
 .hud-display {
-  position:relative; background:rgba(0,245,255,0.03);
-  border:1px solid var(--glass-border);
-  border-radius:16px; padding:30px;
-  overflow:hidden;
-}
-.hud-display::before {
-  content:'';
-  position:absolute; inset:0;
-  background:radial-gradient(ellipse at top left, rgba(0,245,255,0.06), transparent 60%);
-}
-.hud-screen {
-  width:100%; aspect-ratio:4/3;
-  background:rgba(0,0,0,0.6);
-  border:1px solid rgba(0,245,255,0.2);
-  border-radius:8px;
-  position:relative; overflow:hidden;
   display:flex; align-items:center; justify-content:center;
 }
-.hud-grid-lines {
+.oled-screen {
+  width:260px; height:200px;
+  background:#000;
+  border-radius:6px;
+  position:relative; overflow:hidden;
+  box-shadow: 0 0 0 2px #111, 0 0 40px rgba(255,255,255,0.08), 0 0 80px rgba(0,245,255,0.06);
+  font-family:'Share Tech Mono',monospace;
+  padding:18px 20px;
+  display:flex; flex-direction:column; gap:0;
+}
+/* scan line sweep */
+.oled-screen::before {
+  content:'';
   position:absolute; inset:0;
-  background-image:
-    linear-gradient(rgba(0,245,255,0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,245,255,0.05) 1px, transparent 1px);
-  background-size:30px 30px;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 3px,
+    rgba(0,0,0,0.18) 3px,
+    rgba(0,0,0,0.18) 4px
+  );
+  pointer-events:none; z-index:3;
 }
-.hud-corner {
-  position:absolute; width:20px; height:20px;
-  border-color:var(--cyan);
-  border-style:solid;
+/* sweep highlight */
+.oled-screen::after {
+  content:'';
+  position:absolute; left:0; right:0; height:30%;
+  background:linear-gradient(to bottom, rgba(255,255,255,0.03), transparent);
+  animation: oledSweep 4s ease-in-out infinite;
+  pointer-events:none; z-index:4;
 }
-.hud-corner.tl { top:8px; left:8px; border-width:2px 0 0 2px; }
-.hud-corner.tr { top:8px; right:8px; border-width:2px 2px 0 0; }
-.hud-corner.bl { bottom:8px; left:8px; border-width:0 0 2px 2px; }
-.hud-corner.br { bottom:8px; right:8px; border-width:0 2px 2px 0; }
-.hud-vitals {
-  position:relative; z-index:1;
-  display:grid; grid-template-columns:1fr 1fr; gap:16px;
-  padding:16px;
+@keyframes oledSweep {
+  0%   { top:-30%; }
+  100% { top:120%; }
 }
-.vital-item {
-  text-align:center;
-  border:1px solid rgba(0,245,255,0.12);
-  border-radius:6px; padding:12px 8px;
-  background:rgba(0,0,0,0.4);
+@keyframes oledFlicker {
+  0%,95%,100% { opacity:1; }
+  97%          { opacity:0.92; }
 }
-.vital-label { font-family:'Share Tech Mono',monospace; font-size:0.6rem; color:var(--silver); letter-spacing:2px; }
-.vital-value {
-  font-family:'Orbitron',sans-serif; font-size:1.3rem;
-  font-weight:700; color:var(--cyan);
-  text-shadow:var(--glow-cyan);
-  animation: vitalBlink 3s ease-in-out infinite;
+.oled-screen { animation: oledFlicker 8s ease-in-out infinite; }
+/* top row: battery */
+.oled-top {
+  display:flex; justify-content:flex-end; align-items:center; gap:6px;
+  margin-bottom:14px; position:relative; z-index:2;
 }
-.vital-unit { font-size:0.65rem; color:var(--silver); }
+.oled-batt-pct {
+  color:#fff; font-size:0.75rem; letter-spacing:1px;
+}
+.oled-batt-icon {
+  display:inline-flex; align-items:center; gap:1px;
+}
+.oled-batt-body {
+  width:22px; height:11px;
+  border:1.5px solid #fff; border-radius:2px;
+  position:relative; padding:1.5px;
+  display:flex; align-items:center;
+}
+.oled-batt-fill {
+  height:100%; border-radius:1px;
+  background:#fff;
+  transition: width 1s ease;
+}
+.oled-batt-nub {
+  width:3px; height:5px;
+  background:#fff; border-radius:0 1px 1px 0;
+  margin-left:1px; flex-shrink:0;
+}
+/* data rows */
+.oled-row {
+  display:flex; align-items:center; gap:14px;
+  padding:6px 0;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  position:relative; z-index:2;
+}
+.oled-row:last-child { border-bottom:none; }
+.oled-icon {
+  width:22px; display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+.oled-val {
+  color:#fff; font-size:1rem; letter-spacing:1px;
+  font-family:'Share Tech Mono',monospace;
+  transition: opacity 0.3s;
+}
+.oled-val.updating { opacity:0.4; }
+/* pixel heart */
+.px-heart {
+  width:16px; height:14px;
+  background:
+    radial-gradient(circle at 35% 35%, #fff 40%, transparent 41%),
+    radial-gradient(circle at 65% 35%, #fff 40%, transparent 41%),
+    polygon(50% 90%, 0% 35%, 100% 35%);
+  clip-path: path('M8,13 C8,13 1,8 1,4.5 C1,2.5 2.5,1 4.5,1 C6,1 7.5,2 8,3 C8.5,2 10,1 11.5,1 C13.5,1 15,2.5 15,4.5 C15,8 8,13 8,13Z');
+  background:#fff;
+}
 .hud-alert {
-  position:absolute; bottom:16px; left:16px; right:16px;
-  background:rgba(255,100,0,0.1);
-  border:1px solid rgba(255,150,0,0.4);
-  border-radius:4px; padding:8px 12px;
-  font-family:'Share Tech Mono',monospace; font-size:0.65rem;
-  color:#ff9500; letter-spacing:2px;
-  animation: alertBlink 2s ease-in-out infinite;
+  display:none;
 }
 .hud-metrics { display:flex; flex-direction:column; gap:20px; }
 .metric-bar { }
@@ -1351,45 +1389,46 @@ footer {
     </div>
     <div class="hud-layout reveal">
       <div class="hud-display">
-        <div class="hud-screen">
-          <div class="hud-grid-lines"></div>
-          <div class="hud-corner tl"></div>
-          <div class="hud-corner tr"></div>
-          <div class="hud-corner bl"></div>
-          <div class="hud-corner br"></div>
-          <div class="hud-vitals">
-            <div class="vital-item">
-              <div class="vital-label">HEART RATE</div>
-              <div class="vital-value" id="hrVal">72</div>
-              <div class="vital-unit">BPM</div>
-            </div>
-            <div class="vital-item">
-              <div class="vital-label">SpO₂</div>
-              <div class="vital-value" id="spo2Val">98</div>
-              <div class="vital-unit">%</div>
-            </div>
-            <div class="vital-item">
-              <div class="vital-label">O₂ LEVEL</div>
-              <div class="vital-value" id="o2Val">94</div>
-              <div class="vital-unit">%</div>
-            </div>
-            <div class="vital-item">
-              <div class="vital-label">SUIT TEMP</div>
-              <div class="vital-value" id="tmpVal">21</div>
-              <div class="vital-unit">°C</div>
-            </div>
-            <div class="vital-item">
-              <div class="vital-label">PRESSURE</div>
-              <div class="vital-value">4.3</div>
-              <div class="vital-unit">PSI</div>
-            </div>
-            <div class="vital-item">
-              <div class="vital-label">BATTERY</div>
-              <div class="vital-value">87</div>
-              <div class="vital-unit">%</div>
-            </div>
+        <div class="oled-screen">
+          <!-- battery top row -->
+          <div class="oled-top">
+            <span class="oled-batt-pct" id="oledBatt">85 %</span>
+            <span class="oled-batt-icon">
+              <span class="oled-batt-body">
+                <span class="oled-batt-fill" id="oledBattFill" style="width:85%"></span>
+              </span>
+              <span class="oled-batt-nub"></span>
+            </span>
           </div>
-          <div class="hud-alert">⚠ CO₂ MONITOR ACTIVE — NOMINAL</div>
+          <!-- heart rate -->
+          <div class="oled-row">
+            <div class="oled-icon">
+              <svg width="16" height="14" viewBox="0 0 16 14" fill="white">
+                <path d="M8 13 C8 13 1 8 1 4.5 C1 2.5 2.5 1 4.5 1 C6 1 7.2 2 8 3.2 C8.8 2 10 1 11.5 1 C13.5 1 15 2.5 15 4.5 C15 8 8 13 8 13Z"/>
+              </svg>
+            </div>
+            <div class="oled-val" id="oledHR">81 BPM</div>
+          </div>
+          <!-- temperature -->
+          <div class="oled-row">
+            <div class="oled-icon">
+              <svg width="10" height="18" viewBox="0 0 10 18" fill="white">
+                <rect x="3.5" y="1" width="3" height="11" rx="1.5"/>
+                <circle cx="5" cy="14" r="3"/>
+                <rect x="4" y="6" width="1" height="6" fill="black"/>
+              </svg>
+            </div>
+            <div class="oled-val" id="oledTemp">19.0 C</div>
+          </div>
+          <!-- humidity -->
+          <div class="oled-row">
+            <div class="oled-icon">
+              <svg width="12" height="16" viewBox="0 0 12 16" fill="white">
+                <path d="M6 1 C6 1 1 7 1 10.5 C1 13 3.2 15 6 15 C8.8 15 11 13 11 10.5 C11 7 6 1 6 1Z"/>
+              </svg>
+            </div>
+            <div class="oled-val" id="oledHum">25 %</div>
+          </div>
         </div>
       </div>
       <div class="hud-metrics">
@@ -1854,19 +1893,28 @@ function showInfo(id){
   if(tabMap[id]!==undefined && tabs[tabMap[id]]) tabs[tabMap[id]].classList.add('active');
 }
 
-// ─── HUD LIVE VALUES ───
+// ─── OLED LIVE VALUES ───
 (function(){
-  function rand(base,range){ return Math.round(base + (Math.random()-0.5)*range); }
-  setInterval(()=>{
-    const hr=document.getElementById('hrVal');
-    const spo2=document.getElementById('spo2Val');
-    const o2=document.getElementById('o2Val');
-    const tmp=document.getElementById('tmpVal');
-    if(hr) hr.textContent=rand(72,8);
-    if(spo2) spo2.textContent=rand(97,3);
-    if(o2) o2.textContent=rand(93,4);
-    if(tmp) tmp.textContent=rand(21,3);
-  },3000);
+  function rand(base, range){ return (Math.round((base + (Math.random()-0.5)*range)*10)/10); }
+  function update(id, val){
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.classList.add('updating');
+    setTimeout(()=>{ el.textContent = val; el.classList.remove('updating'); }, 150);
+  }
+  function tick(){
+    const hr   = Math.round(rand(81, 10));
+    const temp = rand(19, 2).toFixed(1);
+    const hum  = Math.round(rand(25, 8));
+    const batt = Math.round(rand(85, 6));
+    update('oledHR',   hr + ' BPM');
+    update('oledTemp', temp + ' C');
+    update('oledHum',  hum + ' %');
+    update('oledBatt', batt + ' %');
+    const fill = document.getElementById('oledBattFill');
+    if(fill) fill.style.width = batt + '%';
+  }
+  setInterval(tick, 3000);
 })();
 
 
