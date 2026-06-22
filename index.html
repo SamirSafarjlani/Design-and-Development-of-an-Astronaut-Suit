@@ -244,12 +244,12 @@ section { position:relative; z-index:1; padding:100px 40px; }
 #overview {
   background:linear-gradient(180deg, transparent, rgba(0,20,50,0.4), transparent);
 }
-.overview-container { display:flex; gap:40px; align-items:flex-start; }
-.suit-visual { position:relative; flex:0 0 auto; width:420px; display:flex; flex-direction:column; align-items:center; }
+.suit-stage { display:flex; flex-direction:column; align-items:center; }
+.suit-visual { position:relative; display:flex; flex-direction:column; align-items:center; }
 .view-toggle {
   display:flex; gap:0; margin-bottom:16px;
   border:1px solid var(--glass-border); border-radius:6px; overflow:hidden;
-  width:fit-content; align-self:flex-start;
+  width:fit-content;
 }
 .view-btn {
   font-family:'Share Tech Mono',monospace; font-size:0.65rem;
@@ -317,39 +317,77 @@ section { position:relative; z-index:1; padding:100px 40px; }
   height:1px; transform-origin:left center;
   pointer-events:none;
 }
-.suit-info-panel {
-  flex:1; min-height:500px;
+.suit-hint {
+  margin-top:18px;
+  font-family:'Share Tech Mono',monospace; font-size:0.68rem;
+  color:rgba(139,168,200,0.5); letter-spacing:4px;
+  display:flex; align-items:center; gap:8px;
 }
-.info-card {
-  display:none;
+.hint-dot {
+  width:8px; height:8px; border-radius:50%;
+  background:var(--cyan); opacity:0.6;
+  animation: hotspotPulse 2s ease-in-out infinite;
+}
+/* ─── BOTTOM DRAWER ─── */
+.suit-drawer {
+  width:100%; max-height:0; overflow:hidden;
+  transition: max-height 0.55s cubic-bezier(0.4,0,0.2,1), margin-top 0.4s ease;
+  margin-top:0;
   background:var(--glass);
   border:1px solid var(--glass-border);
-  border-radius:12px; padding:30px;
-  animation: fadeIn 0.4s ease;
-  overflow-y:auto; max-height:640px;
+  border-radius:16px;
 }
-.info-card.active { display:block; }
-.info-photo-strip { margin-top:24px; padding-top:20px; border-top:1px solid rgba(0,245,255,0.08); }
-.photo-strip-label {
-  font-family:'Share Tech Mono',monospace; font-size:0.6rem;
+.suit-drawer.open { max-height:700px; margin-top:28px; }
+.drawer-header {
+  display:flex; justify-content:space-between; align-items:flex-start;
+  padding:28px 36px 20px;
+  border-bottom:1px solid rgba(0,245,255,0.08);
+}
+.drawer-name {
+  font-family:'Orbitron',sans-serif; font-size:1.5rem;
+  color:var(--cyan); text-shadow:var(--glow-cyan); margin-bottom:4px;
+}
+.drawer-sub { color:var(--silver); font-size:0.85rem; }
+.drawer-close {
+  background:none; border:1px solid var(--glass-border);
+  color:var(--silver); font-size:1rem; width:34px; height:34px;
+  border-radius:6px; cursor:pointer; transition:all 0.3s;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.drawer-close:hover { border-color:var(--cyan); color:var(--cyan); box-shadow:var(--glow-cyan); }
+.drawer-body {
+  display:grid; grid-template-columns:1fr 1fr; gap:36px;
+  padding:28px 36px 32px;
+}
+.drawer-desc { color:#a0bcd8; line-height:1.9; font-size:0.9rem; margin-bottom:14px; }
+.drawer-bullets { list-style:none; }
+.drawer-bullets li {
+  padding:7px 0; border-bottom:1px solid rgba(0,245,255,0.06);
+  color:var(--silver); font-size:0.85rem;
+  display:flex; align-items:center; gap:10px;
+}
+.drawer-bullets li::before { content:'▸'; color:var(--cyan); font-size:0.65rem; flex-shrink:0; }
+.drawer-photo-label {
+  font-family:'Share Tech Mono',monospace; font-size:0.62rem;
   color:var(--cyan); letter-spacing:3px; margin-bottom:14px;
 }
-.photo-strip-row {
-  display:flex; gap:10px; overflow-x:auto; padding-bottom:6px;
+.drawer-photo-grid {
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(130px,1fr)); gap:10px;
 }
-.photo-strip-row::-webkit-scrollbar { height:3px; }
-.photo-strip-row::-webkit-scrollbar-thumb { background:rgba(0,245,255,0.2); border-radius:2px; }
-.photo-thumb {
-  flex:0 0 auto; width:110px; cursor:pointer;
-  border:1px solid var(--glass-border); border-radius:6px;
-  overflow:hidden; transition:all 0.3s; background:rgba(0,0,0,0.3);
+.drawer-photo-item {
+  border-radius:8px; overflow:hidden;
+  border:1px solid var(--glass-border);
+  cursor:pointer; transition:all 0.3s;
+  background:rgba(0,0,0,0.3);
 }
-.photo-thumb:hover { border-color:var(--cyan); box-shadow:var(--glow-cyan); transform:scale(1.04); }
-.photo-thumb img { width:100%; height:80px; object-fit:cover; display:block; }
-.photo-thumb span {
+.drawer-photo-item:hover {
+  border-color:var(--cyan); box-shadow:var(--glow-cyan); transform:scale(1.03);
+}
+.drawer-photo-item img { width:100%; height:90px; object-fit:cover; display:block; }
+.drawer-photo-item span {
   display:block; font-family:'Share Tech Mono',monospace;
   font-size:0.5rem; color:var(--silver); letter-spacing:1px;
-  padding:5px 6px; text-align:center;
+  padding:6px; text-align:center;
 }
 /* Lightbox for images */
 .img-lightbox {
@@ -375,27 +413,13 @@ section { position:relative; z-index:1; padding:100px 40px; }
   transition:color 0.3s;
 }
 .img-lightbox-close:hover { color:var(--cyan); }
-.info-card-title {
-  font-family:'Orbitron',sans-serif; font-size:1.4rem;
-  color:var(--cyan); margin-bottom:8px;
-  text-shadow:var(--glow-cyan);
-}
-.info-card-sub { color:var(--silver); font-size:0.85rem; margin-bottom:24px; }
-.info-card p { color:#a0bcd8; line-height:1.9; margin-bottom:16px; }
-.info-list { list-style:none; margin-top:16px; }
-.info-list li {
-  padding:10px 0; border-bottom:1px solid rgba(0,245,255,0.07);
-  color:var(--silver); font-size:0.9rem;
-  display:flex; align-items:center; gap:10px;
-}
-.info-list li::before { content:'▸'; color:var(--cyan); font-size:0.7rem; }
 .subsystem-tabs {
   display:flex; flex-wrap:wrap; gap:10px; margin-bottom:30px;
 }
 .sub-tab {
   font-family:'Share Tech Mono',monospace;
-  font-size:0.7rem; letter-spacing:2px;
-  padding:8px 16px; border-radius:4px;
+  font-size:0.68rem; letter-spacing:2px;
+  padding:8px 18px; border-radius:20px;
   border:1px solid var(--glass-border);
   background:var(--glass); color:var(--silver);
   cursor:pointer; transition:all 0.3s;
@@ -403,7 +427,7 @@ section { position:relative; z-index:1; padding:100px 40px; }
 .sub-tab:hover, .sub-tab.active {
   border-color:var(--cyan); color:var(--cyan);
   background:rgba(0,245,255,0.06);
-  box-shadow:0 0 10px rgba(0,245,255,0.2);
+  box-shadow:0 0 12px rgba(0,245,255,0.2);
 }
 
 /* ─── HUD ─── */
@@ -966,7 +990,6 @@ footer {
   }
   section { padding:70px 20px; }
   .about-grid, .hud-layout, .plss-layout, .electronics-layout { grid-template-columns:1fr; }
-  .overview-container { flex-direction:column; }
   .suit-visual { width:100%; }
   .team-grid { grid-template-columns:repeat(2,1fr); }
   .gallery-grid { grid-template-columns:repeat(2,1fr); }
@@ -986,6 +1009,11 @@ footer {
   .spec-grid { grid-template-columns:1fr; }
   .elec-specs { grid-template-columns:1fr; }
   .footer-bottom { flex-direction:column; text-align:center; }
+  .drawer-body { grid-template-columns:1fr; }
+  .drawer-header { padding:20px 20px 16px; }
+  .drawer-body { padding:20px; }
+  .drawer-name { font-size:1.1rem; }
+  .suit-drawer.open { max-height:900px; }
 }
 </style>
 </head>
@@ -1146,23 +1174,13 @@ footer {
       <h2 class="section-title">Full Suit Architecture</h2>
       <div class="section-line"></div>
     </div>
-    <div class="subsystem-tabs reveal">
-      <button class="sub-tab active" onclick="showInfo('helmet')">Helmet HUD</button>
-      <button class="sub-tab" onclick="showInfo('plss-tab')">PLSS</button>
-      <button class="sub-tab" onclick="showInfo('exo-tab')">Exoskeleton</button>
-      <button class="sub-tab" onclick="showInfo('gloves-tab')">Gloves</button>
-      <button class="sub-tab" onclick="showInfo('body-tab')">Suit Body</button>
-      <button class="sub-tab" onclick="showInfo('chest-tab')">Chest Interface</button>
-    </div>
-    <div class="overview-container reveal">
+    <div class="suit-stage reveal">
       <div class="suit-visual">
-        <!-- Front/Back toggle -->
         <div class="view-toggle">
           <button class="view-btn active" id="btnFront" onclick="switchView('front')">FRONT</button>
           <button class="view-btn" id="btnBack" onclick="switchView('back')">BACK</button>
         </div>
         <div class="suit-diagram">
-          <!-- FRONT VIEW -->
           <div id="suitFront" class="suit-view">
             <div class="suit-img-wrap">
               <img src="Astronaut Suit Photos/Full Suit Front Side.png" alt="Astronaut Suit Front View" class="suit-photo">
@@ -1173,138 +1191,27 @@ footer {
               <div class="hotspot" style="top:75%;left:50%;transform:translate(-50%,0)" data-label="Suit Body" onclick="showInfo('body-tab')"><div class="hotspot-dot"></div></div>
             </div>
           </div>
-          <!-- BACK VIEW -->
           <div id="suitBack" class="suit-view" style="display:none">
             <div class="suit-img-wrap">
-              <img src="Astronaut Suit Photos/Full suit Back side.png" alt="Astronaut Suit Back View — PLSS" class="suit-photo">
+              <img src="Astronaut Suit Photos/Full suit Back side.png" alt="Astronaut Suit Back View" class="suit-photo">
               <div class="hotspot plss-hotspot" style="top:37%;left:50%;transform:translate(-50%,0)" data-label="PLSS" onclick="showInfo('plss-tab')"><div class="hotspot-dot"></div></div>
             </div>
           </div>
         </div>
+        <div class="suit-hint" id="suitHint"><div class="hint-dot"></div>TAP A HOTSPOT TO EXPLORE</div>
       </div>
-      <div class="suit-info-panel">
-        <div class="info-card active" id="info-helmet">
-          <div class="info-card-title">Helmet HUD</div>
-          <div class="info-card-sub">Head-Up Display System</div>
-          <p>The helmet-integrated Head-Up Display provides astronauts with real-time critical data overlaid on their field of view, eliminating the need to look away from the task at hand. The transparent OLED display projects telemetry directly onto the visor surface.</p>
-          <ul class="info-list">
-            <li>Heart rate monitoring (BPM)</li>
-            <li>SpO₂ blood oxygen saturation</li>
-            <li>Internal and external temperature</li>
-            <li>Remaining oxygen levels</li>
-            <li>CO₂ concentration alerts</li>
-            <li>Suit pressure warnings</li>
-            <li>Battery level indicator</li>
-          </ul>
-          <div class="info-photo-strip">
-            <div class="photo-strip-label">PROJECT PHOTOS</div>
-            <div class="photo-strip-row">
-              <div class="photo-thumb" onclick="openImgLightbox('Helmet/Cad View Front and Side.png','CAD — Front & Side View')"><img src="Helmet/Cad View Front and Side.png" alt="CAD Front & Side"><span>CAD VIEW</span></div>
-              <div class="photo-thumb" onclick="openImgLightbox('Helmet/Helmet IRL (1).png','Helmet — Real Build')"><img src="Helmet/Helmet IRL (1).png" alt="Helmet IRL"><span>REAL BUILD</span></div>
-              <div class="photo-thumb" onclick="openImgLightbox('Helmet/Isometric view of helmet PCB and HUD CAD.png','Isometric — PCB & HUD CAD')"><img src="Helmet/Isometric view of helmet PCB and HUD CAD.png" alt="Isometric PCB HUD"><span>PCB & HUD</span></div>
-              <div class="photo-thumb" onclick="openImgLightbox('Helmet/PCB 3D model.png','PCB 3D Model')"><img src="Helmet/PCB 3D model.png" alt="PCB 3D"><span>PCB 3D</span></div>
-              <div class="photo-thumb" onclick="openImgLightbox('Helmet/PCB Routing.png','PCB Routing Layout')"><img src="Helmet/PCB Routing.png" alt="PCB Routing"><span>ROUTING</span></div>
-            </div>
+      <!-- Bottom Drawer -->
+      <div class="suit-drawer" id="suitDrawer">
+        <div class="drawer-header">
+          <div>
+            <div class="drawer-name" id="drawerName"></div>
+            <div class="drawer-sub" id="drawerSub"></div>
           </div>
+          <button class="drawer-close" onclick="closeDrawer()">✕</button>
         </div>
-        <div class="info-card" id="info-plss-tab">
-          <div class="info-card-title">PLSS — Portable Life Support System</div>
-          <div class="info-card-sub">Primary Life Support Backpack</div>
-          <p>The PLSS is the backbone of astronaut survivability. This integrated backpack system manages all life-critical functions including oxygen supply, CO₂ scrubbing, temperature control, and emergency reserves throughout the entire EVA duration.</p>
-          <ul class="info-list">
-            <li>Primary oxygen supply tanks</li>
-            <li>CO₂ removal via LiOH scrubbers</li>
-            <li>Active thermal regulation loops</li>
-            <li>Forced air circulation fans</li>
-            <li>High-density battery pack</li>
-            <li>Emergency backup O₂ system</li>
-          </ul>
-          <div class="info-photo-strip">
-            <div class="photo-strip-label">PROJECT PHOTOS</div>
-            <div class="photo-strip-row">
-              <div class="photo-thumb" onclick="openImgLightbox('PLSS/PLSS Back side.png','PLSS — Back Side')"><img src="PLSS/PLSS Back side.png" alt="PLSS Back"><span>BACK SIDE</span></div>
-              <div class="photo-thumb" onclick="openImgLightbox('PLSS/Chest Plate PLSS.png','PLSS — Chest Plate')"><img src="PLSS/Chest Plate PLSS.png" alt="Chest Plate"><span>CHEST PLATE</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="info-card" id="info-exo-tab">
-          <div class="info-card-title">Exoskeleton</div>
-          <div class="info-card-sub">Forearm Assist System</div>
-          <p>The forearm exoskeleton provides structural support and motion assistance to the astronaut's arms during extended EVA operations. Servo-driven linkages reduce the muscular load required to operate tools and maintain arm position against suit pressure resistance.</p>
-          <ul class="info-list">
-            <li>Servo-driven forearm linkages</li>
-            <li>Reduced arm fatigue during EVA</li>
-            <li>Rigid carbon-composite frame</li>
-            <li>Quick-release attachment system</li>
-            <li>Compatible with pressure gloves</li>
-            <li>Sensor-assisted motion tracking</li>
-          </ul>
-          <div class="info-photo-strip">
-            <div class="photo-strip-label">PROJECT PHOTOS</div>
-            <div class="photo-strip-row">
-              <div class="photo-thumb" onclick="openImgLightbox('Exoskeleton Photos/exoskeleton Cad.png','Exoskeleton — CAD Model')"><img src="Exoskeleton Photos/exoskeleton Cad.png" alt="Exoskeleton CAD"><span>CAD MODEL</span></div>
-              <div class="photo-thumb" onclick="openImgLightbox('Exoskeleton Photos/Exoskeleton Real testing.png','Exoskeleton — Real Testing')"><img src="Exoskeleton Photos/Exoskeleton Real testing.png" alt="Exoskeleton Testing"><span>REAL TESTING</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="info-card" id="info-gloves-tab">
-          <div class="info-card-title">Gloves</div>
-          <div class="info-card-sub">Assisted Hand Dexterity System</div>
-          <p>Traditional EVA gloves reduce grip strength by up to 60%. Our glove system uses servo-assisted mechanisms and flex sensors to amplify grip strength, reduce fatigue, and maintain precision during critical tool operations in the hands.</p>
-          <ul class="info-list">
-            <li>Servo-assisted grip amplification</li>
-            <li>Flex sensor array per finger</li>
-            <li>Reduced hand fatigue by ~70%</li>
-            <li>Tactile feedback preservation</li>
-            <li>Tool-lock precision assist</li>
-            <li>Thermal hand warming elements</li>
-          </ul>
-          <div class="info-photo-strip">
-            <div class="photo-strip-label">PROJECT PHOTOS</div>
-            <div class="photo-strip-row">
-              <div class="photo-thumb" onclick="openImgLightbox('Gloves Photos/Gloves Cad (1).png','Gloves — CAD Model')"><img src="Gloves Photos/Gloves Cad (1).png" alt="Gloves CAD"><span>CAD MODEL</span></div>
-              <div class="photo-thumb" onclick="openImgLightbox('Gloves Photos/Gloves IRL (1).png','Gloves — Real Build')"><img src="Gloves Photos/Gloves IRL (1).png" alt="Gloves IRL"><span>REAL BUILD</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="info-card" id="info-body-tab">
-          <div class="info-card-title">Suit Body</div>
-          <div class="info-card-sub">Structural & Pressure Shell</div>
-          <p>The primary suit body serves as the pressure barrier between the astronaut and the vacuum of space. Multiple layers of advanced materials work together to maintain internal pressure, thermal control, and protection from micrometeorite impacts.</p>
-          <ul class="info-list">
-            <li>Multi-layer pressure retention</li>
-            <li>Thermal micro-meteorite shield</li>
-            <li>Lightweight titanium structural joints</li>
-            <li>Embedded cable routing channels</li>
-            <li>Modular assembly connectors</li>
-            <li>Radiation shielding layer</li>
-          </ul>
-          <div class="info-photo-strip">
-            <div class="photo-strip-label">PROJECT PHOTOS</div>
-            <div class="photo-strip-row">
-              <div class="photo-thumb" onclick="openImgLightbox('Boots/Cad Boots.png','Boots — CAD Model')"><img src="Boots/Cad Boots.png" alt="Boots CAD"><span>CAD MODEL</span></div>
-              <div class="photo-thumb" onclick="openImgLightbox('Boots/IRL Boots.png','Boots — Real Build')"><img src="Boots/IRL Boots.png" alt="Boots IRL"><span>REAL BUILD</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="info-card" id="info-chest-tab">
-          <div class="info-card-title">Chest Control Interface</div>
-          <div class="info-card-sub">Primary Mission Control Panel</div>
-          <p>The chest-mounted interface provides the astronaut with direct tactile access to all critical suit systems without requiring fine dexterity. Large, glove-compatible controls and a bright OLED display allow rapid system monitoring and adjustment.</p>
-          <ul class="info-list">
-            <li>Central OLED status display</li>
-            <li>Oxygen flow rate control</li>
-            <li>Temperature setpoint adjustment</li>
-            <li>Emergency system toggles</li>
-            <li>Communication system controls</li>
-            <li>Battery status indicators</li>
-          </ul>
-          <div class="info-photo-strip">
-            <div class="photo-strip-label">PROJECT PHOTOS</div>
-            <div class="photo-strip-row">
-              <div class="photo-thumb" onclick="openImgLightbox('PLSS/Chest Plate PLSS.png','Chest Control Interface')"><img src="PLSS/Chest Plate PLSS.png" alt="Chest Plate"><span>CHEST PLATE</span></div>
-            </div>
-          </div>
+        <div class="drawer-body">
+          <div id="drawerText"></div>
+          <div id="drawerPhotos"></div>
         </div>
       </div>
     </div>
@@ -1663,33 +1570,105 @@ footer {
   els.forEach(el=>io.observe(el));
 })();
 
+// ─── SUBSYSTEM DATA ───
+const suitData = {
+  'helmet': {
+    name:'Helmet HUD', sub:'Head-Up Display System',
+    desc:'The helmet-integrated Head-Up Display provides astronauts with real-time critical data overlaid on their field of view, eliminating the need to look away from the task at hand. The transparent OLED display projects telemetry directly onto the visor surface.',
+    bullets:['Heart rate monitoring (BPM)','SpO₂ blood oxygen saturation','Internal and external temperature','Remaining oxygen levels','CO₂ concentration alerts','Suit pressure warnings','Battery level indicator'],
+    photos:[
+      {src:'Helmet/Cad View Front and Side.png',label:'CAD VIEW'},
+      {src:'Helmet/Helmet IRL (1).png',label:'REAL BUILD'},
+      {src:'Helmet/Isometric view of helmet PCB and HUD CAD.png',label:'PCB & HUD'},
+      {src:'Helmet/PCB 3D model.png',label:'PCB 3D'},
+      {src:'Helmet/PCB Routing.png',label:'ROUTING'}
+    ]
+  },
+  'plss-tab': {
+    name:'PLSS', sub:'Portable Life Support System',
+    desc:'The PLSS is the backbone of astronaut survivability. This integrated backpack system manages all life-critical functions including oxygen supply, CO₂ scrubbing, temperature control, and emergency reserves throughout the entire EVA duration.',
+    bullets:['Primary oxygen supply tanks','CO₂ removal via LiOH scrubbers','Active thermal regulation loops','Forced air circulation fans','High-density battery pack','Emergency backup O₂ system'],
+    photos:[
+      {src:'PLSS/PLSS Back side.png',label:'BACK SIDE'},
+      {src:'PLSS/Chest Plate PLSS.png',label:'CHEST PLATE'}
+    ]
+  },
+  'exo-tab': {
+    name:'Exoskeleton', sub:'Forearm Assist System',
+    desc:'The forearm exoskeleton provides structural support and motion assistance to the astronaut\'s arms during extended EVA operations. Servo-driven linkages reduce the muscular load required to operate tools and maintain arm position against suit pressure resistance.',
+    bullets:['Servo-driven forearm linkages','Reduced arm fatigue during EVA','Rigid carbon-composite frame','Quick-release attachment system','Compatible with pressure gloves','Sensor-assisted motion tracking'],
+    photos:[
+      {src:'Exoskeleton Photos/exoskeleton Cad.png',label:'CAD MODEL'},
+      {src:'Exoskeleton Photos/Exoskeleton Real testing.png',label:'REAL TESTING'}
+    ]
+  },
+  'gloves-tab': {
+    name:'Gloves', sub:'Assisted Hand Dexterity System',
+    desc:'Traditional EVA gloves reduce grip strength by up to 60%. Our glove system uses servo-assisted mechanisms and flex sensors to amplify grip strength, reduce fatigue, and maintain precision during critical tool operations.',
+    bullets:['Servo-assisted grip amplification','Flex sensor array per finger','Reduced hand fatigue by ~70%','Tactile feedback preservation','Tool-lock precision assist','Thermal hand warming elements'],
+    photos:[
+      {src:'Gloves Photos/Gloves Cad (1).png',label:'CAD MODEL'},
+      {src:'Gloves Photos/Gloves IRL (1).png',label:'REAL BUILD'}
+    ]
+  },
+  'body-tab': {
+    name:'Suit Body', sub:'Structural & Pressure Shell',
+    desc:'The primary suit body serves as the pressure barrier between the astronaut and the vacuum of space. Multiple layers of advanced materials work together to maintain internal pressure, thermal control, and protection from micrometeorite impacts.',
+    bullets:['Multi-layer pressure retention','Thermal micro-meteorite shield','Lightweight titanium structural joints','Embedded cable routing channels','Modular assembly connectors','Radiation shielding layer'],
+    photos:[
+      {src:'Boots/Cad Boots.png',label:'CAD MODEL'},
+      {src:'Boots/IRL Boots.png',label:'REAL BUILD'}
+    ]
+  },
+  'chest-tab': {
+    name:'Chest Control Interface', sub:'Primary Mission Control Panel',
+    desc:'The chest-mounted interface provides the astronaut with direct tactile access to all critical suit systems without requiring fine dexterity. Large, glove-compatible controls and a bright OLED display allow rapid system monitoring and adjustment.',
+    bullets:['Central OLED status display','Oxygen flow rate control','Temperature setpoint adjustment','Emergency system toggles','Communication system controls','Battery status indicators'],
+    photos:[
+      {src:'PLSS/Chest Plate PLSS.png',label:'CHEST PLATE'}
+    ]
+  }
+};
+
 // ─── SUIT VIEW TOGGLE ───
 function switchView(view){
-  const front = document.getElementById('suitFront');
-  const back  = document.getElementById('suitBack');
-  const btnF  = document.getElementById('btnFront');
-  const btnB  = document.getElementById('btnBack');
-  if(view === 'front'){
-    front.style.display = 'block'; back.style.display = 'none';
+  const front=document.getElementById('suitFront'), back=document.getElementById('suitBack');
+  const btnF=document.getElementById('btnFront'), btnB=document.getElementById('btnBack');
+  if(view==='front'){
+    front.style.display='block'; back.style.display='none';
     btnF.classList.add('active'); btnB.classList.remove('active');
   } else {
-    front.style.display = 'none'; back.style.display = 'block';
+    front.style.display='none'; back.style.display='block';
     btnF.classList.remove('active'); btnB.classList.add('active');
     showInfo('plss-tab');
   }
 }
 
-// ─── SUBSYSTEM INFO TABS ───
+// ─── SHOW INFO DRAWER ───
 function showInfo(id){
-  document.querySelectorAll('.info-card').forEach(c=>c.classList.remove('active'));
-  document.querySelectorAll('.sub-tab').forEach(t=>t.classList.remove('active'));
-  const card = document.getElementById('info-'+id);
-  if(card) card.classList.add('active');
-  const tabs = document.querySelectorAll('.sub-tab');
-  const tabMap = {
-    'helmet':0,'plss-tab':1,'exo-tab':2,'gloves-tab':3,'body-tab':4,'chest-tab':5
-  };
-  if(tabMap[id]!==undefined && tabs[tabMap[id]]) tabs[tabMap[id]].classList.add('active');
+  const data = suitData[id];
+  if(!data) return;
+  document.getElementById('drawerName').textContent = data.name;
+  document.getElementById('drawerSub').textContent  = data.sub;
+  document.getElementById('drawerText').innerHTML   =
+    `<p class="drawer-desc">${data.desc}</p>
+     <ul class="drawer-bullets">${data.bullets.map(b=>`<li>${b}</li>`).join('')}</ul>`;
+  document.getElementById('drawerPhotos').innerHTML =
+    `<div class="drawer-photo-label">PROJECT PHOTOS</div>
+     <div class="drawer-photo-grid">
+       ${data.photos.map(p=>`
+         <div class="drawer-photo-item" onclick="openImgLightbox('${p.src}','${p.label}')">
+           <img src="${p.src}" alt="${p.label}">
+           <span>${p.label}</span>
+         </div>`).join('')}
+     </div>`;
+  document.getElementById('suitHint').style.display = 'none';
+  document.getElementById('suitDrawer').classList.add('open');
+}
+
+function closeDrawer(){
+  document.getElementById('suitDrawer').classList.remove('open');
+  document.getElementById('suitHint').style.display = 'flex';
 }
 
 // ─── OLED LIVE VALUES ───
