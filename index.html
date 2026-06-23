@@ -902,6 +902,94 @@ section { position:relative; z-index:1; padding:100px 40px; }
   color:#6ea8ff;
 }
 
+/* ─── SHOWCASE ─── */
+#showcase {
+  position:relative; z-index:1;
+  padding:100px 20px;
+  overflow:hidden;
+}
+.showcase-inner {
+  max-width:1100px; margin:0 auto;
+  background:linear-gradient(135deg, rgba(0,20,50,0.95) 0%, rgba(0,10,35,0.98) 100%);
+  border:1px solid rgba(0,245,255,0.25);
+  border-radius:16px;
+  padding:60px;
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 0 80px rgba(0,245,255,0.08), inset 0 0 80px rgba(0,20,80,0.3);
+}
+.showcase-inner::before {
+  content:'';
+  position:absolute; inset:0;
+  background:linear-gradient(135deg, rgba(0,245,255,0.04) 0%, transparent 60%);
+  pointer-events:none;
+}
+.showcase-award-badge {
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.7rem; letter-spacing:3px; color:#ffd700;
+  border:1px solid rgba(255,215,0,0.3);
+  background:rgba(255,215,0,0.08);
+  padding:8px 20px; border-radius:20px;
+  margin-bottom:28px;
+  text-shadow:0 0 20px rgba(255,215,0,0.5);
+}
+.showcase-layout {
+  display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center;
+}
+.showcase-left h2 {
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(1.8rem,3.5vw,3rem); font-weight:900;
+  color:#fff; line-height:1.2; margin-bottom:16px;
+}
+.showcase-left h2 span { color:var(--cyan); text-shadow:var(--glow-cyan); }
+.showcase-left p {
+  color:var(--silver); line-height:1.9; font-size:1rem; font-weight:300;
+  margin-bottom:32px;
+}
+.showcase-cta {
+  display:inline-block;
+  font-family:'Orbitron',sans-serif; font-size:0.75rem;
+  letter-spacing:2px; text-transform:uppercase;
+  padding:14px 36px; border-radius:4px;
+  background:linear-gradient(135deg,var(--cyan),var(--blue));
+  color:#000; font-weight:700;
+  text-decoration:none;
+  box-shadow:0 0 30px rgba(0,245,255,0.3);
+  transition:all 0.3s;
+}
+.showcase-cta:hover { box-shadow:0 0 50px rgba(0,245,255,0.5); transform:translateY(-2px); }
+.showcase-details {
+  display:grid; grid-template-columns:1fr 1fr; gap:16px;
+}
+.showcase-detail-card {
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--glass-border);
+  border-radius:10px; padding:20px;
+  transition:border-color 0.3s;
+}
+.showcase-detail-card:hover { border-color:rgba(0,245,255,0.3); }
+.showcase-detail-label {
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.6rem; letter-spacing:3px; color:var(--cyan);
+  margin-bottom:8px;
+}
+.showcase-detail-val {
+  font-family:'Orbitron',sans-serif;
+  font-size:0.9rem; color:#fff; font-weight:600; line-height:1.4;
+}
+.showcase-detail-card.highlight {
+  border-color:rgba(255,215,0,0.3);
+  background:rgba(255,215,0,0.05);
+  grid-column:1/-1;
+}
+.showcase-detail-card.highlight .showcase-detail-label { color:#ffd700; }
+.showcase-detail-card.highlight .showcase-detail-val { color:#ffd700; font-size:1rem; }
+@media(max-width:768px){
+  .showcase-layout { grid-template-columns:1fr; }
+  .showcase-inner { padding:36px 24px; }
+}
+
 /* ─── FOOTER ─── */
 footer {
   position:relative; z-index:1;
@@ -1391,6 +1479,42 @@ footer {
           <span class="transfer-tag">🏥 Medical Wearables</span>
           <span class="transfer-tag">🛡️ Defense</span>
           <span class="transfer-tag">🏗️ Construction</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SHOWCASE -->
+<section id="showcase">
+  <div class="showcase-inner reveal">
+    <div class="showcase-award-badge">🏆 NOMINATED — SUSTAINABILITY &amp; SOCIAL IMPACT AWARD</div>
+    <div class="showcase-layout">
+      <div class="showcase-left">
+        <h2>Come See Us at the<br><span>Capstone Showcase</span></h2>
+        <p>We've been nominated for an award at the FEIT Autumn 2026 Capstone Showcase. Come experience the suit in person, see the HUD in action, and meet the team behind it.</p>
+        <a href="#team" class="showcase-cta">Meet the Team</a>
+      </div>
+      <div class="showcase-details">
+        <div class="showcase-detail-card">
+          <div class="showcase-detail-label">DATE</div>
+          <div class="showcase-detail-val">Tuesday<br>30 June 2026</div>
+        </div>
+        <div class="showcase-detail-card">
+          <div class="showcase-detail-label">PUBLIC VIEWING</div>
+          <div class="showcase-detail-val">4:00 PM –<br>7:00 PM</div>
+        </div>
+        <div class="showcase-detail-card">
+          <div class="showcase-detail-label">LOCATION</div>
+          <div class="showcase-detail-val">UTS Building 11<br>Level 4</div>
+        </div>
+        <div class="showcase-detail-card">
+          <div class="showcase-detail-label">FIND US AT</div>
+          <div class="showcase-detail-val">Pod 300.14</div>
+        </div>
+        <div class="showcase-detail-card highlight">
+          <div class="showcase-detail-label">🏆 AWARD CATEGORY</div>
+          <div class="showcase-detail-val">Sustainability &amp; Social Impact Award</div>
         </div>
       </div>
     </div>
