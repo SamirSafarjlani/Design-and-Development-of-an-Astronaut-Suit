@@ -1311,38 +1311,38 @@ footer {
         <div class="circuit-nodes">
           <div class="node-row">
             <div class="node">🧠<div class="node-label">ESP32-C3<br>MCU</div></div>
-            <div class="node">📟<div class="node-label">OLED<br>DISPLAY</div></div>
-            <div class="node">📡<div class="node-label">COMM<br>MODULE</div></div>
+            <div class="node">📟<div class="node-label">OLED<br>SH1106</div></div>
+            <div class="node">❤️<div class="node-label">MAX30102<br>PULSE OX</div></div>
           </div>
           <div class="connect-row">
             <div class="node-connector"></div>
           </div>
           <div class="node-row">
-            <div class="node">❤️<div class="node-label">PULSE OX<br>SENSOR</div></div>
+            <div class="node">🌡️<div class="node-label">BME688<br>ENV SENSOR</div></div>
             <div class="node">🔌<div class="node-label">POWER<br>MGMT</div></div>
-            <div class="node">🌡️<div class="node-label">ENV<br>SENSOR</div></div>
+            <div class="node">📋<div class="node-label">CUSTOM<br>PCB</div></div>
           </div>
           <div class="connect-row">
             <div class="node-connector"></div>
           </div>
           <div class="node-row">
-            <div class="node">🔋<div class="node-label">LIPO<br>CELLS</div></div>
-            <div class="node">📋<div class="node-label">CUSTOM<br>PCB</div></div>
-            <div class="node">🏃<div class="node-label">IMU<br>6-DOF</div></div>
+            <div class="node">🔋<div class="node-label">LIPO<br>3.7V</div></div>
+            <div class="node">🔔<div class="node-label">ALARM<br>PIEZO</div></div>
+            <div class="node">⚡<div class="node-label">I²C / SPI<br>BUS</div></div>
           </div>
         </div>
       </div>
       <div>
-        <p style="color:var(--silver);line-height:1.9;margin-bottom:28px;font-weight:300;">The electronics architecture is built around the ESP32-C3 microcontroller, providing dual-core processing, integrated WiFi/BLE connectivity, and a rich peripheral set — all in a radiation-tolerant, low-power package suited for space environments.</p>
+        <p style="color:var(--silver);line-height:1.9;margin-bottom:28px;font-weight:300;">The electronics architecture is built around the ESP32-C3 microcontroller, integrating real-time biomedical and environmental sensors on a custom Altium-designed PCB. Sensor data is shared over a common I²C bus and displayed on a monocular OLED HUD inside the helmet visor. Firmware is written in C++ using the Arduino framework.</p>
         <div class="elec-specs">
-          <div class="elec-spec"><div class="elec-spec-label">MICROCONTROLLER</div><div class="elec-spec-val">ESP32-C3 RISC-V</div></div>
-          <div class="elec-spec"><div class="elec-spec-label">DISPLAY</div><div class="elec-spec-val">128×64 OLED (SSD1306)</div></div>
+          <div class="elec-spec"><div class="elec-spec-label">MICROCONTROLLER</div><div class="elec-spec-val">ESP32-C3</div></div>
+          <div class="elec-spec"><div class="elec-spec-label">DISPLAY</div><div class="elec-spec-val">128×64 OLED (SH1106)</div></div>
           <div class="elec-spec"><div class="elec-spec-label">PULSE OXIMETER</div><div class="elec-spec-val">MAX30102</div></div>
-          <div class="elec-spec"><div class="elec-spec-label">ENV SENSOR</div><div class="elec-spec-val">BME280 (T/H/P)</div></div>
-          <div class="elec-spec"><div class="elec-spec-label">CONNECTIVITY</div><div class="elec-spec-val">WiFi + BLE 5.0</div></div>
-          <div class="elec-spec"><div class="elec-spec-label">PCB LAYERS</div><div class="elec-spec-val">4-Layer Custom FR4</div></div>
-          <div class="elec-spec"><div class="elec-spec-label">POWER INPUT</div><div class="elec-spec-val">3.3V / 5V Rails</div></div>
-          <div class="elec-spec"><div class="elec-spec-label">IMU</div><div class="elec-spec-val">MPU-6050 6-DOF</div></div>
+          <div class="elec-spec"><div class="elec-spec-label">ENV SENSOR</div><div class="elec-spec-val">BME688 (T/H/P/AQ)</div></div>
+          <div class="elec-spec"><div class="elec-spec-label">COMMUNICATION</div><div class="elec-spec-val">I²C / SPI Bus</div></div>
+          <div class="elec-spec"><div class="elec-spec-label">PCB</div><div class="elec-spec-val">Custom (Altium Designer)</div></div>
+          <div class="elec-spec"><div class="elec-spec-label">POWER INPUT</div><div class="elec-spec-val">3.7V 250mAh LiPo</div></div>
+          <div class="elec-spec"><div class="elec-spec-label">FIRMWARE</div><div class="elec-spec-val">Arduino C++ Framework</div></div>
         </div>
       </div>
     </div>
