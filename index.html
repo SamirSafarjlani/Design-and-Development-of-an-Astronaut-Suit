@@ -990,6 +990,36 @@ section { position:relative; z-index:1; padding:100px 40px; }
   .showcase-inner { padding:36px 24px; }
 }
 
+/* ─── MOBILE PERFORMANCE ─── */
+@media(max-width:768px){
+  /* Kill expensive spinning rings */
+  .hero-ring { animation:none !important; opacity:0.08; }
+  /* Stop floating suit animation */
+  .hero-suit { animation:none !important; }
+  /* Simplify nav blur */
+  nav { backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); }
+  /* Kill OLED flicker + sweep on mobile */
+  .oled-screen { animation:none !important; }
+  .oled-screen::before, .oled-screen::after { animation:none !important; display:none; }
+  /* Kill circuit data-flow */
+  .circuit-bg::after, .node::after { animation:none !important; }
+  /* Kill scroll pulse */
+  .scroll-line { animation:none !important; }
+  /* Reduce hotspot pulse frequency — keep it but simpler */
+  .hotspot-dot { animation-duration:3s !important; }
+  /* Kill PLSS pulse */
+  .plss-hotspot .hotspot-dot { animation-duration:3s !important; }
+  /* Reduce glass blur on cards */
+  .glass-card, .team-card, .impact-card, .elec-card, .suit-drawer {
+    backdrop-filter:blur(6px) !important;
+    -webkit-backdrop-filter:blur(6px) !important;
+  }
+  /* GPU-hint for main animated elements */
+  .suit-photo-hero, .hotspot-dot { will-change:transform; }
+  /* Reduce reveal transition cost */
+  .reveal { transition:opacity 0.5s ease, transform 0.5s ease; }
+}
+
 /* ─── FOOTER ─── */
 footer {
   position:relative; z-index:1;
@@ -1204,7 +1234,7 @@ footer {
         <div class="suit-diagram">
           <div id="suitFront" class="suit-view">
             <div class="suit-img-wrap">
-              <img src="Astronaut Suit Photos/Full Suit Front Side.png" alt="Astronaut Suit Front View" class="suit-photo">
+              <img src="Astronaut Suit Photos/Full Suit Front Side.png" loading="lazy" alt="Astronaut Suit Front View" class="suit-photo">
               <div class="hotspot" style="top:8%;left:69%;transform:translate(-50%,0)" data-label="Helmet HUD" onclick="showInfo('helmet')"><div class="hotspot-dot"></div></div>
               <div class="hotspot" style="top:38%;left:55%" data-label="Chest Interface" onclick="showInfo('chest-tab')"><div class="hotspot-dot"></div></div>
               <div class="hotspot left" style="top:22%;left:27%" data-label="Exoskeleton" onclick="showInfo('exo-tab')"><div class="hotspot-dot"></div></div>
@@ -1214,7 +1244,7 @@ footer {
           </div>
           <div id="suitBack" class="suit-view" style="display:none">
             <div class="suit-img-wrap">
-              <img src="Astronaut Suit Photos/Full suit Back side.png" alt="Astronaut Suit Back View" class="suit-photo">
+              <img src="Astronaut Suit Photos/Full suit Back side.png" loading="lazy" alt="Astronaut Suit Back View" class="suit-photo">
               <div class="hotspot plss-hotspot" style="top:37%;left:38%;transform:translate(-50%,0)" data-label="PLSS" onclick="showInfo('plss-tab')"><div class="hotspot-dot"></div></div>
             </div>
           </div>
@@ -1380,7 +1410,7 @@ footer {
     </div>
     <div class="team-grid reveal">
       <div class="team-card">
-        <div class="team-avatar"><img src="Team/Nora.png" alt="Nora Sulaiman"></div>
+        <div class="team-avatar"><img src="Team/Nora.png" loading="lazy" alt="Nora Sulaiman"></div>
         <div class="team-name">Nora Sulaiman</div>
         <div class="team-role">MECHATRONICS ENGINEER</div>
         <div class="team-discipline">Mechatronics Engineering with Marketing</div>
@@ -1396,7 +1426,7 @@ footer {
         </a>
       </div>
       <div class="team-card">
-        <div class="team-avatar"><img src="Team/Han.png" alt="Han Pham"></div>
+        <div class="team-avatar"><img src="Team/Han.png" loading="lazy" alt="Han Pham"></div>
         <div class="team-name">Han Pham</div>
         <div class="team-role">MECHATRONICS ENGINEER</div>
         <div class="team-discipline">Mechatronics Engineering</div>
@@ -1412,7 +1442,7 @@ footer {
         </a>
       </div>
       <div class="team-card">
-        <div class="team-avatar"><img src="Team/Samir.png" alt="Samir Safarjlani"></div>
+        <div class="team-avatar"><img src="Team/Samir.png" loading="lazy" alt="Samir Safarjlani"></div>
         <div class="team-name">Samir Safarjlani</div>
         <div class="team-role">MECHATRONICS ENGINEER</div>
         <div class="team-discipline">Mechatronics Engineering</div>
@@ -1428,7 +1458,7 @@ footer {
         </a>
       </div>
       <div class="team-card">
-        <div class="team-avatar"><img src="Team/Adel.png" alt="Adel Al Alghori"></div>
+        <div class="team-avatar"><img src="Team/Adel.png" loading="lazy" alt="Adel Al Alghori"></div>
         <div class="team-name">Adel Al Alghori</div>
         <div class="team-role">MECHANICAL ENGINEER</div>
         <div class="team-discipline">Mechanical Engineering</div>
@@ -1562,13 +1592,20 @@ footer {
 (function(){
   const canvas = document.getElementById('starfield');
   const ctx = canvas.getContext('2d');
-  let W, H, stars=[], nebulas=[];
+  let W, H, stars=[], nebulas=[], rafId, lastFrame=0;
+  const mobile = window.innerWidth < 768;
+  const NUM_STARS = mobile ? 70 : 220;
+  const NUM_NEBULAS = mobile ? 2 : 5;
+  const FPS_CAP = mobile ? 1000/24 : 0; // 24fps cap on mobile, uncapped on desktop
 
-  function resize(){ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; }
+  function resize(){
+    W=canvas.width=window.innerWidth;
+    H=canvas.height=window.innerHeight;
+  }
 
   function initStars(){
     stars=[];
-    for(let i=0;i<220;i++){
+    for(let i=0;i<NUM_STARS;i++){
       stars.push({
         x:Math.random()*W, y:Math.random()*H,
         r:Math.random()*1.6+0.2,
@@ -1578,7 +1615,7 @@ footer {
       });
     }
     nebulas=[];
-    for(let i=0;i<5;i++){
+    for(let i=0;i<NUM_NEBULAS;i++){
       nebulas.push({
         x:Math.random()*W, y:Math.random()*H,
         r:Math.random()*200+100,
@@ -1589,8 +1626,9 @@ footer {
   }
 
   function draw(t){
+    if(FPS_CAP && t - lastFrame < FPS_CAP){ rafId=requestAnimationFrame(draw); return; }
+    lastFrame=t;
     ctx.clearRect(0,0,W,H);
-    // Nebulas
     nebulas.forEach(n=>{
       const g=ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r);
       g.addColorStop(0,n.color+n.a+')');
@@ -1598,7 +1636,6 @@ footer {
       ctx.fillStyle=g;
       ctx.beginPath(); ctx.arc(n.x,n.y,n.r,0,Math.PI*2); ctx.fill();
     });
-    // Stars
     stars.forEach(s=>{
       const twinkle=0.5+0.5*Math.sin(t*0.001*s.speed*10+s.twinkle);
       ctx.beginPath();
@@ -1606,11 +1643,17 @@ footer {
       ctx.fillStyle=`rgba(200,230,255,${s.a*twinkle})`;
       ctx.fill();
     });
-    requestAnimationFrame(draw);
+    rafId=requestAnimationFrame(draw);
   }
 
+  // Pause when tab is hidden to save battery
+  document.addEventListener('visibilitychange',()=>{
+    if(document.hidden) cancelAnimationFrame(rafId);
+    else rafId=requestAnimationFrame(draw);
+  });
+
   window.addEventListener('resize',()=>{ resize(); initStars(); });
-  resize(); initStars(); requestAnimationFrame(draw);
+  resize(); initStars(); rafId=requestAnimationFrame(draw);
 })();
 
 // ─── SCROLL REVEAL ───
