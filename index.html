@@ -1178,7 +1178,7 @@ footer {
           <div class="stats-grid">
             <div class="stat-item"><div class="stat-num">7</div><div class="stat-label">SUBSYSTEMS</div></div>
             <div class="stat-item"><div class="stat-num">4</div><div class="stat-label">ENGINEERS</div></div>
-            <div class="stat-item"><div class="stat-num">12</div><div class="stat-label">SENSORS</div></div>
+            <div class="stat-item"><div class="stat-num">3</div><div class="stat-label">SENSORS</div></div>
             <div class="stat-item"><div class="stat-num">2026</div><div class="stat-label">CAPSTONE</div></div>
           </div>
         </div>
@@ -1292,26 +1292,26 @@ footer {
         </div>
       </div>
       <div class="hud-metrics">
-        <p style="color:var(--silver);line-height:1.9;margin-bottom:24px;font-weight:300;">The helmet-integrated HUD provides astronauts with a real-time overlay of all critical mission data. Transparent OLED panels project telemetry directly onto the visor without obstructing visibility.</p>
+        <p style="color:var(--silver);line-height:1.9;margin-bottom:24px;font-weight:300;">A monocular OLED display (SH1106) is mounted inside the helmet visor, reflecting real-time biometric and environmental data directly into the astronaut's field of view. Sensor data is read by the ESP32-C3 over I²C and updated live on the display.</p>
         <div class="metric-bar">
-          <div class="metric-label"><span>O₂ SUPPLY</span><span>94%</span></div>
-          <div class="bar-track"><div class="bar-fill" style="width:94%"></div></div>
-        </div>
-        <div class="metric-bar">
-          <div class="metric-label"><span>BATTERY</span><span>87%</span></div>
-          <div class="bar-track"><div class="bar-fill" style="width:87%"></div></div>
-        </div>
-        <div class="metric-bar">
-          <div class="metric-label"><span>CO₂ SCRUBBER</span><span>76%</span></div>
-          <div class="bar-track"><div class="bar-fill" style="width:76%"></div></div>
-        </div>
-        <div class="metric-bar">
-          <div class="metric-label"><span>THERMAL CONTROL</span><span>100%</span></div>
-          <div class="bar-track"><div class="bar-fill" style="width:100%"></div></div>
-        </div>
-        <div class="metric-bar">
-          <div class="metric-label"><span>COMM SIGNAL</span><span>82%</span></div>
+          <div class="metric-label"><span>HEART RATE (MAX30102)</span><span>Live BPM</span></div>
           <div class="bar-track"><div class="bar-fill" style="width:82%"></div></div>
+        </div>
+        <div class="metric-bar">
+          <div class="metric-label"><span>SpO₂ — BLOOD OXYGEN (MAX30102)</span><span>Live %</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:97%"></div></div>
+        </div>
+        <div class="metric-bar">
+          <div class="metric-label"><span>TEMPERATURE (BME688)</span><span>Live °C</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:60%"></div></div>
+        </div>
+        <div class="metric-bar">
+          <div class="metric-label"><span>HUMIDITY (BME688)</span><span>Live %</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:45%"></div></div>
+        </div>
+        <div class="metric-bar">
+          <div class="metric-label"><span>BATTERY LEVEL</span><span>Live %</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:88%"></div></div>
         </div>
       </div>
     </div>
