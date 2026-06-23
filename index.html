@@ -1239,6 +1239,7 @@ footer {
               <div class="hotspot" style="top:38%;left:55%" data-label="Chest Interface" onclick="showInfo('chest-tab')"><div class="hotspot-dot"></div></div>
               <div class="hotspot left" style="top:22%;left:27%" data-label="Exoskeleton" onclick="showInfo('exo-tab')"><div class="hotspot-dot"></div></div>
               <div class="hotspot" style="top:57%;left:71%" data-label="Gloves" onclick="showInfo('gloves-tab')"><div class="hotspot-dot"></div></div>
+              <div class="hotspot left" style="top:58%;left:37%" data-label="Body Suit" onclick="showInfo('suit-tab')"><div class="hotspot-dot"></div></div>
               <div class="hotspot" style="top:90%;left:48%;transform:translate(-50%,0)" data-label="Boots" onclick="showInfo('body-tab')"><div class="hotspot-dot"></div></div>
             </div>
           </div>
@@ -1705,6 +1706,22 @@ const suitData = {
     photos:[
       {src:'Gloves Photos/Gloves Cad (1).png',label:'CAD MODEL'},
       {src:'Gloves Photos/Gloves IRL (1).png',label:'REAL BUILD'}
+    ]
+  },
+  'suit-tab': {
+    name:'Body Suit', sub:'Suit Structure & Layering System',
+    desc:'The prototype suit body is constructed with 2 functional layers: a structured outer shell and an inner padding layer. While the prototype simplifies construction for demonstration purposes, a real NASA EVA suit comprises multiple critical layers — each serving a distinct engineering function as documented in EVA suit reference literature.',
+    bullets:[
+      'Prototype Layer 1 — Outer Shell: structured fabric exterior giving the suit its astronaut appearance and shape',
+      'Prototype Layer 2 — Inner Padding: foam padding for comfort, fit, and basic pressure distribution',
+      'Reference Layer A — Liquid Cooling & Ventilation Garment (LCVG): regulates body temperature via water-cooled tubes',
+      'Reference Layer B — Pressure Bladder: maintains internal suit pressure against the vacuum of space',
+      'Reference Layer C — Restraint Layer: prevents the pressure bladder from ballooning under pressure',
+      'Reference Layer D — Thermal Micrometeoroid Garment (TMG): multi-layer aluminised Mylar for thermal and impact protection',
+      'Reference Layer E — Outer Protective Shell: Ortho-Fabric resistant to abrasion, fire, and micrometeorite strikes'
+    ],
+    photos:[
+      {src:'Suit Build/Suit.png',label:'SUIT BUILD'}
     ]
   },
   'body-tab': {
