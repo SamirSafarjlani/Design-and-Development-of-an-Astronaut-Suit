@@ -105,6 +105,11 @@ nav {
   width:100%; height:100%;
   filter: drop-shadow(0 0 40px rgba(0,245,255,0.4)) drop-shadow(0 0 80px rgba(0,102,255,0.2));
 }
+.suit-photo-hero {
+  width:100%; height:100%;
+  object-fit:contain;
+  filter: drop-shadow(0 0 40px rgba(0,245,255,0.35)) drop-shadow(0 0 80px rgba(0,102,255,0.2));
+}
 .hero-ring {
   position:absolute; border-radius:50%;
   border:1px solid rgba(0,245,255,0.15);
@@ -1047,79 +1052,7 @@ footer {
     <div class="hero-ring"></div>
     <div class="hero-ring"></div>
     <div class="hero-ring"></div>
-    <svg class="suit-svg" viewBox="0 0 300 520" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <!-- Helmet -->
-      <ellipse cx="150" cy="80" rx="68" ry="72" fill="rgba(0,30,60,0.9)" stroke="#00f5ff" stroke-width="1.5"/>
-      <ellipse cx="150" cy="80" rx="52" ry="56" fill="rgba(0,245,255,0.08)" stroke="#00f5ff" stroke-width="0.8" stroke-dasharray="4 3"/>
-      <!-- Visor -->
-      <ellipse cx="150" cy="82" rx="38" ry="34" fill="rgba(0,100,200,0.3)" stroke="#00aaff" stroke-width="1"/>
-      <ellipse cx="150" cy="82" rx="38" ry="34" fill="url(#visorGrad)"/>
-      <!-- HUD lines in visor -->
-      <line x1="120" y1="68" x2="180" y2="68" stroke="rgba(0,245,255,0.3)" stroke-width="0.5"/>
-      <line x1="120" y1="78" x2="180" y2="78" stroke="rgba(0,245,255,0.2)" stroke-width="0.5"/>
-      <line x1="120" y1="88" x2="180" y2="88" stroke="rgba(0,245,255,0.2)" stroke-width="0.5"/>
-      <line x1="120" y1="98" x2="180" y2="98" stroke="rgba(0,245,255,0.3)" stroke-width="0.5"/>
-      <line x1="132" y1="60" x2="132" y2="106" stroke="rgba(0,245,255,0.15)" stroke-width="0.5"/>
-      <line x1="168" y1="60" x2="168" y2="106" stroke="rgba(0,245,255,0.15)" stroke-width="0.5"/>
-      <!-- Helmet details -->
-      <rect x="118" y="138" width="64" height="14" rx="4" fill="rgba(0,30,60,0.8)" stroke="#00f5ff" stroke-width="1"/>
-      <!-- Neck ring -->
-      <rect x="110" y="148" width="80" height="12" rx="3" fill="rgba(0,60,120,0.6)" stroke="#006fff" stroke-width="1"/>
-      <!-- Torso -->
-      <path d="M72 160 L80 340 L220 340 L228 160 Q210 148 150 148 Q90 148 72 160Z"
-            fill="rgba(0,20,50,0.9)" stroke="#00f5ff" stroke-width="1.2"/>
-      <!-- Chest panel -->
-      <rect x="110" y="175" width="80" height="60" rx="8" fill="rgba(0,245,255,0.06)" stroke="#00aaff" stroke-width="1"/>
-      <rect x="118" y="183" width="28" height="18" rx="3" fill="rgba(0,100,200,0.2)" stroke="#00f5ff" stroke-width="0.6"/>
-      <rect x="154" y="183" width="28" height="18" rx="3" fill="rgba(0,200,100,0.15)" stroke="#00c864" stroke-width="0.6"/>
-      <circle cx="132" cy="215" r="6" fill="none" stroke="#00f5ff" stroke-width="0.8"/>
-      <circle cx="150" cy="215" r="6" fill="none" stroke="#ff6400" stroke-width="0.8"/>
-      <circle cx="168" cy="215" r="6" fill="none" stroke="#00c864" stroke-width="0.8"/>
-      <!-- Left arm -->
-      <path d="M72 165 L40 180 L30 290 L58 295 L68 200 L80 185Z"
-            fill="rgba(0,20,50,0.9)" stroke="#00f5ff" stroke-width="1"/>
-      <!-- Right arm -->
-      <path d="M228 165 L260 180 L270 290 L242 295 L232 200 L220 185Z"
-            fill="rgba(0,20,50,0.9)" stroke="#00f5ff" stroke-width="1"/>
-      <!-- Left glove -->
-      <path d="M30 290 L22 310 L25 330 L50 335 L58 310 L58 295Z"
-            fill="rgba(0,30,70,0.9)" stroke="#00f5ff" stroke-width="1"/>
-      <!-- Right glove -->
-      <path d="M270 290 L278 310 L275 330 L250 335 L242 310 L242 295Z"
-            fill="rgba(0,30,70,0.9)" stroke="#00f5ff" stroke-width="1"/>
-      <!-- PLSS backpack lines -->
-      <rect x="200" y="170" width="30" height="100" rx="4" fill="rgba(0,245,255,0.04)" stroke="rgba(0,245,255,0.3)" stroke-width="0.8" stroke-dasharray="3 2"/>
-      <!-- Torso panel lines -->
-      <line x1="150" y1="160" x2="150" y2="340" stroke="rgba(0,245,255,0.1)" stroke-width="0.5"/>
-      <line x1="80" y1="240" x2="220" y2="240" stroke="rgba(0,245,255,0.08)" stroke-width="0.5"/>
-      <!-- Belt / waist ring -->
-      <rect x="76" y="330" width="148" height="16" rx="4" fill="rgba(0,60,120,0.6)" stroke="#006fff" stroke-width="1"/>
-      <!-- Legs -->
-      <path d="M80 346 L76 460 L110 464 L120 380 L150 375 L180 380 L190 464 L224 460 L220 346Z"
-            fill="rgba(0,20,50,0.9)" stroke="#00f5ff" stroke-width="1.2"/>
-      <!-- Boots -->
-      <path d="M76 460 L68 490 L88 500 L112 496 L110 464Z"
-            fill="rgba(0,30,70,0.9)" stroke="#00f5ff" stroke-width="1"/>
-      <path d="M224 460 L232 490 L212 500 L188 496 L190 464Z"
-            fill="rgba(0,30,70,0.9)" stroke="#00f5ff" stroke-width="1"/>
-      <!-- Tech detail lines on legs -->
-      <line x1="88" y1="390" x2="108" y2="390" stroke="rgba(0,245,255,0.2)" stroke-width="0.5"/>
-      <line x1="192" y1="390" x2="212" y2="390" stroke="rgba(0,245,255,0.2)" stroke-width="0.5"/>
-      <line x1="88" y1="420" x2="108" y2="420" stroke="rgba(0,245,255,0.15)" stroke-width="0.5"/>
-      <line x1="192" y1="420" x2="212" y2="420" stroke="rgba(0,245,255,0.15)" stroke-width="0.5"/>
-      <!-- Shoulder rings -->
-      <ellipse cx="80" cy="175" rx="16" ry="10" fill="rgba(0,60,120,0.5)" stroke="#006fff" stroke-width="0.8"/>
-      <ellipse cx="220" cy="175" rx="16" ry="10" fill="rgba(0,60,120,0.5)" stroke="#006fff" stroke-width="0.8"/>
-      <!-- Knee pads -->
-      <ellipse cx="97" cy="418" rx="18" ry="12" fill="rgba(0,40,90,0.5)" stroke="rgba(0,245,255,0.3)" stroke-width="0.8"/>
-      <ellipse cx="203" cy="418" rx="18" ry="12" fill="rgba(0,40,90,0.5)" stroke="rgba(0,245,255,0.3)" stroke-width="0.8"/>
-      <defs>
-        <radialGradient id="visorGrad" cx="40%" cy="35%">
-          <stop offset="0%" stop-color="rgba(0,180,255,0.4)"/>
-          <stop offset="100%" stop-color="rgba(0,20,80,0.2)"/>
-        </radialGradient>
-      </defs>
-    </svg>
+    <img src="Astronaut Suit Photos/Full Suit Front Side.png" class="suit-photo-hero" alt="Astronaut Suit">
   </div>
 
   <div class="hero-btns">
@@ -1434,19 +1367,19 @@ footer {
       <div class="impact-card">
         <div class="impact-icon">🌍</div>
         <h3>Social Impact</h3>
-        <p>This project directly improves human safety in one of the most extreme environments ever encountered. By advancing EVA suit technology, we reduce risk for astronauts who push the boundary of human knowledge and exploration.</p>
-        <p style="margin-top:12px">The real-time health monitoring platform developed here has direct applications in emergency response, industrial safety, and remote healthcare.</p>
+        <p>This project demonstrates how student-led engineering can address real astronaut safety challenges. The helmet HUD provides continuous heart rate, SpO₂, temperature, and air quality monitoring — reducing reliance on ground control for situational awareness during EVA operations.</p>
+        <p style="margin-top:12px">The biometric monitoring platform developed here has direct applications in emergency response, remote healthcare, and industrial worker safety.</p>
       </div>
       <div class="impact-card">
-        <div class="impact-icon">♻️</div>
-        <h3>Sustainability</h3>
-        <p>The PLSS design optimizes resource consumption throughout extended EVA missions. Smart power management, efficient CO₂ scrubbing, and precise oxygen regulation minimize waste and extend mission duration without increasing consumable mass.</p>
-        <p style="margin-top:12px">Lower mass means lower launch costs, directly reducing the carbon footprint of each mission.</p>
+        <div class="impact-icon">🛠️</div>
+        <h3>Accessible Engineering</h3>
+        <p>The entire suit was built using 3D printing (PLA+ and PETG), off-the-shelf sensors, and a custom Altium-designed PCB — proving that NASA-inspired wearable technology can be developed at a fraction of traditional costs.</p>
+        <p style="margin-top:12px">This low-cost, open-hardware approach makes advanced EVA research accessible to universities, research labs, and developing space programs worldwide.</p>
       </div>
       <div class="impact-card">
         <div class="impact-icon">🔭</div>
         <h3>Technology Transfer</h3>
-        <p>Technologies developed for this suit have broad applicability across high-risk industries and humanitarian sectors.</p>
+        <p>The biometric HUD, exoskeleton joint assembly, and multi-layer protective glove system each have broad applicability beyond space exploration — in any environment where human safety and performance monitoring are critical.</p>
         <div class="transfer-tags">
           <span class="transfer-tag">🔥 Firefighting</span>
           <span class="transfer-tag">⛏️ Mining</span>
